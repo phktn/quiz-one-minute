@@ -1,4 +1,4 @@
-# fastest-finger-first
+# 早押しボタン
 
 ## 概要 / Overview
 
