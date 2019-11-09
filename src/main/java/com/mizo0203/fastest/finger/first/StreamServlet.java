@@ -34,6 +34,7 @@ public class StreamServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/octet-stream");
         try (PrintWriter out = resp.getWriter()) {
             MyCountDownLatch latch = getLatch();
             int id = FlagManager.getInstance().registerListener(this::countDown);
