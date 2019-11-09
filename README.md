@@ -13,7 +13,7 @@
 
 `$ mvn tomcat7:run`
 
-And access to http://localhost:8080/
+And access to http://localhost:8080/fastest-finger-first/
 
 ## ライセンス / License
 
