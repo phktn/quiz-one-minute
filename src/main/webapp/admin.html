@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport"/>
+    <script language="JavaScript" type="text/javascript">
+function start() {
+    var request = new XMLHttpRequest();
+    request.open('GET', '/fastest-finger-first/start', false);
+    request.send(null);
+}
+
+    </script>
+    <title>管理 - 早押しボタン</title>
+</head>
+<body style="font-family: sans-serif;">
+<h1>管理 - 早押しボタン</h1>
+<input onclick="start();" type="button" value="/start"/>
+</body>
+</html>

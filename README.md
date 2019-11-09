@@ -1,7 +1,21 @@
 # fastest-finger-first
-早押しボタン
 
-## License
+## 概要 / Overview
+
+<img align="right" src="images/IMG_0018.png" />
+<img align="right" src="images/IMG_0017.png" />
+
+ブラウザ上で動く「早押しボタン」です。
+
+管理画面からスタートすると、現在ブラウザ上で表示されているすべての「早押しボタン」がアクティブになります。
+
+## How to run
+
+`$ mvn tomcat7:run`
+
+And access to http://localhost:8080/
+
+## ライセンス / License
 
     Copyright 2019 Satoki Mizoguchi
 
