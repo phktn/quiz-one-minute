@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Logger;
 
 @WebServlet(name = "ChallengeServlet", urlPatterns = { "/challenge" })
@@ -32,7 +33,13 @@ public class ChallengeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
         int id = Integer.parseInt(req.getParameter("id"));
-        FlagManager.getInstance().challenge(id);
-        LOG.info("SendServlet doGet id: " + id);
+        long delayMs = FlagManager.getInstance().challenge(id);
+        LOG.info("SendServlet doGet id: " + id + " delayMs: " + delayMs);
+        if (delayMs != 0) {
+            resp.setCharacterEncoding("UTF-8");
+            try (PrintWriter out = resp.getWriter()) {
+                out.print("惜しい！ (" + delayMs + " ms 遅れ)");
+            }
+        }
     }
 }

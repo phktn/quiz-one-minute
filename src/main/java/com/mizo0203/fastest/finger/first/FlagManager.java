@@ -26,6 +26,7 @@ class FlagManager {
     private final Object mFlagIdLockObject = new Object();
     private int mCnt = 0;
     private int mFlagId = 0;
+    private long mFlagTimeMs = -1L;
 
     private FlagManager() {
     }
@@ -34,15 +35,20 @@ class FlagManager {
         return sInstance;
     }
 
-    void challenge(int id) {
+    long challenge(int id) {
         int flagId;
+        long delayMs = 0L;
         synchronized (mFlagIdLockObject) {
             if (mFlagId == -1) {
                 mFlagId = id;
+                mFlagTimeMs = System.currentTimeMillis();
+            } else {
+                delayMs = System.currentTimeMillis() - mFlagTimeMs;
             }
             flagId = mFlagId;
         }
         mListenerMap.get(id).onFlagIdChanged(flagId);
+        return delayMs;
     }
 
     void start() {

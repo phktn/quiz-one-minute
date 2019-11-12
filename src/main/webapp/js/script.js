@@ -17,9 +17,9 @@ function connect() {
                 if (req.status == 200) { // 通信の成功時
                     reconnectWait = 0;
                     var lines = req.responseText.split("\n");
-                    var newLline = lines[lines.length - 2];
-                    log('onreadystatechange newLline: ' + newLline);
-                    result.innerHTML = newLline;
+                    var newLine = lines[lines.length - 2];
+                    log('onreadystatechange newLine: ' + newLine);
+                    result.innerHTML = newLine;
                 }
                 break;
             case XMLHttpRequest.DONE:    // 4: 操作が完了した
@@ -41,6 +41,10 @@ function send(id) {
     var request = new XMLHttpRequest();
     request.open('GET', '/fastest-finger-first/challenge?id=' + id, false);
     request.send(null);
+    if (request.status === 200) {
+        log(request.responseText);
+        document.getElementById('delayMs').innerText = request.responseText;
+    }
 }
 
 function reconnect() {
