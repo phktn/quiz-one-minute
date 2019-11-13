@@ -25,7 +25,7 @@ class FlagManager {
     private final Map<Integer, Listener> mListenerMap = new HashMap<>();
     private final Object mFlagIdLockObject = new Object();
     private int mCnt = 0;
-    private int mFlagId = 0;
+    private Params mParams = new Params(0, 0, "");
     private long mFlagTimeMs = -1L;
 
     private FlagManager() {
@@ -36,29 +36,40 @@ class FlagManager {
     }
 
     long challenge(int id) {
-        int flagId;
+        Params params;
         long delayMs = 0L;
         synchronized (mFlagIdLockObject) {
-            if (mFlagId == -1) {
-                mFlagId = id;
+            if (mParams.mFlagId == -1) {
+                mParams = new Params(id, 0, "");
                 mFlagTimeMs = System.currentTimeMillis();
             } else {
                 delayMs = System.currentTimeMillis() - mFlagTimeMs;
             }
-            flagId = mFlagId;
+            params = mParams;
         }
-        mListenerMap.get(id).onFlagIdChanged(flagId);
+        mListenerMap.get(id).onFlagIdChanged(params);
         return delayMs;
     }
 
     void start() {
-        int flagId;
+        Params params;
         synchronized (mFlagIdLockObject) {
-            mFlagId = -1;
-            flagId = mFlagId;
+            mParams = new Params(-1, 0, "");
+            params = mParams;
         }
         for (Listener listener : mListenerMap.values()) {
-            listener.onFlagIdChanged(flagId);
+            listener.onFlagIdChanged(params);
+        }
+    }
+
+    void message(String msg) {
+        Params params;
+        synchronized (mFlagIdLockObject) {
+            mParams = new Params(mParams.mFlagId, mParams.mFlagId, msg);
+            params = mParams;
+        }
+        for (Listener listener : mListenerMap.values()) {
+            listener.onFlagIdChanged(params);
         }
     }
 
@@ -67,13 +78,33 @@ class FlagManager {
         return mCnt;
     }
 
-    int getFlagId() {
+    Params getParams() {
         synchronized (mFlagIdLockObject) {
-            return mFlagId;
+            return mParams;
         }
     }
 
     interface Listener {
-        void onFlagIdChanged(int id);
+        void onFlagIdChanged(Params params);
+    }
+
+    static class Params {
+        private int mFlagId;
+        private int mMsgId;
+        private String mMsg;
+
+        Params(int flagId, int msgId, String msg) {
+            mFlagId = flagId;
+            mMsgId = msgId;
+            mMsg = msg;
+        }
+
+        int getFlagId() {
+            return mFlagId;
+        }
+
+        String getMessage(int id) {
+            return mMsgId == id ? mMsg : "";
+        }
     }
 }

@@ -34,15 +34,16 @@ public class StreamServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/octet-stream");
         try (PrintWriter out = resp.getWriter()) {
             MyCountDownLatch latch = getLatch();
             int id = FlagManager.getInstance().registerListener(this::countDown);
-            printOutBotton(out, FlagManager.getInstance().getFlagId(), id);
+            printOutButton(out, FlagManager.getInstance().getParams(), id);
             // noinspection InfiniteLoopStatement
             while (true) {
                 latch.await();
-                printOutBotton(out, latch.mFlagId, id);
+                printOutButton(out, latch.mParams, id);
                 latch = getLatch();
             }
         } catch (InterruptedException e) {
@@ -50,20 +51,21 @@ public class StreamServlet extends HttpServlet {
         }
     }
 
-    private void printOutBotton(PrintWriter out, int flagId, int id) {
-        if (flagId == -1) {
-            out.println("<input onclick=\"send(" + id + ");\" type=\"button\" value=\"PUSH !\"/>");
-        } else if (flagId == id) {
-            out.println("<input disabled type=\"button\" value=\"Please answer !\" />");
+    private void printOutButton(PrintWriter out, FlagManager.Params params, int id) {
+        String msg = params.getMessage(id);
+        if (params.getFlagId() == -1) {
+            out.println("<input onclick=\"send(" + id + ");\" type=\"button\" value=\"PUSH !\"/>" + msg);
+        } else if (params.getFlagId() == id) {
+            out.println("<input disabled type=\"button\" value=\"Please answer !\" />" + msg);
         } else {
-            out.println("<input disabled type=\"button\" value=\"Wait...\" />");
+            out.println("<input disabled type=\"button\" value=\"Wait...\" />" + msg);
         }
         out.flush();
     }
 
-    private void countDown(int flagId) {
+    private void countDown(FlagManager.Params params) {
         synchronized (mLatchLockObject) {
-            mLatch.mFlagId = flagId;
+            mLatch.mParams = params;
             mLatch.countDown();
             mLatch = new MyCountDownLatch(1);
 
@@ -77,7 +79,7 @@ public class StreamServlet extends HttpServlet {
     }
 
     private static class MyCountDownLatch extends CountDownLatch {
-        private int mFlagId = 0;
+        private FlagManager.Params mParams = null;
 
         private MyCountDownLatch(int count) {
             super(count);

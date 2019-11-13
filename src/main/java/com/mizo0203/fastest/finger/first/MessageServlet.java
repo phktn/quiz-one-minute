@@ -20,18 +20,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-@WebServlet(name = "StartServlet", urlPatterns = { "/start" })
-public class StartServlet extends HttpServlet {
+@WebServlet(name = "MessageServlet", urlPatterns = {"/message"})
+public class MessageServlet extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(StartServlet.class.getName());
+    private static final Logger LOG = Logger.getLogger(MessageServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        FlagManager.getInstance().start();
-        LOG.info("StartServlet doGet");
+        try (BufferedReader in = req.getReader()) {
+            FlagManager.getInstance().message(in.readLine());
+        }
+        LOG.info("MessageServlet doPost");
     }
 }

@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport"/>
-    <script language="JavaScript" type="text/javascript">
-function start() {
-    var request = new XMLHttpRequest();
-    request.open('GET', '/fastest-finger-first/start', false);
-    request.send(null);
-}
-
-    </script>
+    <script src="js/script.js"></script>
     <title>管理 - 早押しボタン</title>
 </head>
+
 <body style="font-family: sans-serif;">
 <h1>管理 - 早押しボタン</h1>
-<input onclick="start();" type="button" value="/start"/>
+<input onclick="start();" type="button" value="受付開始"/>
+<input onclick="message('やったね！');" type="button" value="やったね！"/>
+<input onclick="message('残念！');" type="button" value="残念！"/>
+<div id="result"></div>
+<div id="delayMs"></div>
+<div id="log">EOF</div>
 </body>
+
 </html>

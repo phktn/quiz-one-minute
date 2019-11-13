@@ -69,6 +69,18 @@ function reconnect() {
     }
 }
 
+function start() {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/fastest-finger-first/start', false);
+    request.send(null);
+}
+
+function message(msg) {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/fastest-finger-first/message', false);
+    request.send(msg);
+}
+
 function disableButton(value) {
     log('disableButton() value: ' + value);
     var result = document.getElementById('result');
