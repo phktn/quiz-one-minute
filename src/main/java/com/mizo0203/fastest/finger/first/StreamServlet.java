@@ -54,7 +54,11 @@ public class StreamServlet extends HttpServlet {
     private void printOutButton(PrintWriter out, FlagManager.Params params, int id) {
         String msg = params.getMessage(id);
         if (params.getFlagId() == -1) {
-            out.println("<input onclick=\"send(" + id + ");\" type=\"button\" value=\"PUSH !\"/>" + msg);
+            if (params.getSkipId() != id) {
+                out.println("<input onclick=\"send(" + id + ");\" type=\"button\" value=\"PUSH !\"/>" + msg);
+            } else {
+                out.println("<input disabled type=\"button\" value=\"お休み中...\" />" + msg);
+            }
         } else if (params.getFlagId() == id) {
             out.println("<input disabled type=\"button\" value=\"Please answer !\" />" + msg);
         } else {

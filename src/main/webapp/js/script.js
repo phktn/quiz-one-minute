@@ -75,6 +75,12 @@ function start() {
     request.send(null);
 }
 
+function skip(msg) {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/fastest-finger-first/skip', false);
+    request.send(msg);
+}
+
 function message(msg) {
     var request = new XMLHttpRequest();
     request.open('POST', '/fastest-finger-first/message', false);

@@ -25,7 +25,7 @@ class FlagManager {
     private final Map<Integer, Listener> mListenerMap = new HashMap<>();
     private final Object mFlagIdLockObject = new Object();
     private int mCnt = 0;
-    private Params mParams = new Params(0, 0, "");
+    private Params mParams = new Params(0, 0, 0, 0, "");
     private long mFlagTimeMs = -1L;
 
     private FlagManager() {
@@ -36,25 +36,38 @@ class FlagManager {
     }
 
     long challenge(int id) {
-        Params params;
+        Params params = null;
         long delayMs = 0L;
         synchronized (mFlagIdLockObject) {
             if (mParams.mFlagId == -1) {
-                mParams = new Params(id, 0, "");
+                mParams = new Params(id, mParams.mSkipId, mParams.mSkipCnt, 0, "");
+                params = mParams;
                 mFlagTimeMs = System.currentTimeMillis();
             } else {
                 delayMs = System.currentTimeMillis() - mFlagTimeMs;
             }
-            params = mParams;
         }
-        mListenerMap.get(id).onFlagIdChanged(params);
+        if (params != null) {
+            mListenerMap.get(id).onFlagIdChanged(params);
+        }
         return delayMs;
     }
 
     void start() {
         Params params;
         synchronized (mFlagIdLockObject) {
-            mParams = new Params(-1, 0, "");
+            mParams = new Params(-1, mParams.mSkipId, mParams.mSkipCnt - 1, 0, "");
+            params = mParams;
+        }
+        for (Listener listener : mListenerMap.values()) {
+            listener.onFlagIdChanged(params);
+        }
+    }
+
+    void skip(String msg) {
+        Params params;
+        synchronized (mFlagIdLockObject) {
+            mParams = new Params(mParams.mFlagId, mParams.mFlagId, 1, mParams.mFlagId, msg);
             params = mParams;
         }
         for (Listener listener : mListenerMap.values()) {
@@ -65,7 +78,7 @@ class FlagManager {
     void message(String msg) {
         Params params;
         synchronized (mFlagIdLockObject) {
-            mParams = new Params(mParams.mFlagId, mParams.mFlagId, msg);
+            mParams = new Params(mParams.mFlagId, mParams.mSkipId, mParams.mSkipCnt, mParams.mFlagId, msg);
             params = mParams;
         }
         for (Listener listener : mListenerMap.values()) {
@@ -90,17 +103,25 @@ class FlagManager {
 
     static class Params {
         private int mFlagId;
+        private int mSkipId;
+        private int mSkipCnt;
         private int mMsgId;
         private String mMsg;
 
-        Params(int flagId, int msgId, String msg) {
+        Params(int flagId, int skipId, int skipCnt, int msgId, String msg) {
             mFlagId = flagId;
+            mSkipId = skipId;
+            mSkipCnt = skipCnt;
             mMsgId = msgId;
             mMsg = msg;
         }
 
         int getFlagId() {
             return mFlagId;
+        }
+
+        int getSkipId() {
+            return mSkipCnt > -1 ? mSkipId : 0;
         }
 
         String getMessage(int id) {
