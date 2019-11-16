@@ -11,7 +11,7 @@
 
 ## How to run
 
-`$ mvn tomcat7:run`
+`$ ./gradlew tomcatRun`
 
 And access to http://localhost:8080/fastest-finger-first/
 
