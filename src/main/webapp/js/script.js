@@ -90,7 +90,7 @@ function message(msg) {
 function disableButton(value) {
     log('disableButton() value: ' + value);
     var result = document.getElementById('result');
-    result.innerHTML = '<input disabled type="button" value="' + value + '" />';
+    result.innerHTML = '<p></p><input class="button is-primary is-large is-fullwidth" disabled type="button" value="' + value + '" />';
 }
 
 function log(body) {

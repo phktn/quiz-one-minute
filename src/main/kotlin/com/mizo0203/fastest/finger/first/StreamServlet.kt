@@ -68,14 +68,14 @@ class StreamServlet : HttpServlet() {
         val msg = params.getMessage(id)
         if (params.flagId == -1) {
             if (params.skipId != id) {
-                out.println("<input onclick=\"send($id);\" type=\"button\" value=\"PUSH !\"/>$msg")
+                out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" onclick=\"send($id);\" type=\"button\" value=\"PUSH !\"/>")
             } else {
-                out.println("<input disabled type=\"button\" value=\"お休み中...\" />$msg")
+                out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" disabled type=\"button\" value=\"お休み中...\" />")
             }
         } else if (params.flagId == id) {
-            out.println("<input disabled type=\"button\" value=\"Please answer !\" />$msg")
+            out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" disabled type=\"button\" value=\"Please answer !\" />")
         } else {
-            out.println("<input disabled type=\"button\" value=\"Wait...\" />$msg")
+            out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" disabled type=\"button\" value=\"Wait...\" />")
         }
         out.flush()
     }
