@@ -88,6 +88,10 @@ internal class FlagManager private constructor() {
         return mCnt
     }
 
+    fun unregisterListener(id: Int) {
+        mListenerMap.remove(id)
+    }
+
     internal interface Listener {
         fun onFlagIdChanged(params: Params)
     }

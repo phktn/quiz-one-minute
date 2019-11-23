@@ -44,23 +44,26 @@ class StreamServlet : HttpServlet() {
         req.characterEncoding = "UTF-8"
         resp.characterEncoding = "UTF-8"
         resp.contentType = "application/octet-stream"
+        val id = FlagManager.instance.registerListener(object : FlagManager.Listener {
+            override fun onFlagIdChanged(params: Params) {
+                countDown(params)
+            }
+        })
         try {
             resp.writer.use { out ->
-                var latch = syncedLatch
-                val id = FlagManager.instance.registerListener(object : FlagManager.Listener {
-                    override fun onFlagIdChanged(params: Params) {
-                        countDown(params)
-                    }
-                })
                 printOutButton(out, FlagManager.instance.params, id)
-                while (true) {
-                    latch.await()
-                    printOutButton(out, latch.mParams!!, id)
-                    latch = syncedLatch
+                try {
+                    while (true) {
+                        val latch = syncedLatch
+                        latch.await()
+                        latch.mParams?.let { printOutButton(out, it, id) }
+                    }
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
                 }
             }
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
+        } finally {
+            FlagManager.instance.unregisterListener(id)
         }
     }
 
