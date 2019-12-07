@@ -71,14 +71,14 @@ class StreamServlet : HttpServlet() {
         val msg = params.getMessage(id)
         if (params.flagId == -1) {
             if (params.skipId != id) {
-                out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" onclick=\"send($id);\" type=\"button\" value=\"PUSH !\"/>")
+                out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}")
             } else {
-                out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" disabled type=\"button\" value=\"お休み中...\" />")
+                out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}")
             }
         } else if (params.flagId == id) {
-            out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" disabled type=\"button\" value=\"Please answer !\" />")
+            out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero is-primary\",\"button\":\"<input class=\\\"button is-primary is-inverted is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Please answer !\\\" />\"}")
         } else {
-            out.println("<p>$msg</p><input class=\"button is-primary is-large is-fullwidth\" disabled type=\"button\" value=\"Wait...\" />")
+            out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Wait...\\\" />\"}")
         }
         out.flush()
     }

@@ -11,7 +11,6 @@ function connect() {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         log('onreadystatechange readyState: ' + req.readyState + ' status: ' + req.status);
-        var result = document.getElementById('result');
         switch (req.readyState) {
             case XMLHttpRequest.LOADING: // 3: ダウンロード中
                 if (req.status == 200) { // 通信の成功時
@@ -19,7 +18,10 @@ function connect() {
                     var lines = req.responseText.split("\n");
                     var newLine = lines[lines.length - 2];
                     log('onreadystatechange newLine: ' + newLine);
-                    result.innerHTML = newLine;
+                    response = JSON.parse(newLine);
+                    document.getElementById('delayMs').innerText = response.delayMs;
+                    document.getElementById('hero').className = response.hero;
+                    document.getElementById('result').innerHTML = response.button;
                 }
                 break;
             case XMLHttpRequest.DONE:    // 4: 操作が完了した
@@ -44,7 +46,11 @@ function send(id) {
     request.send(null);
     if (request.status === 200) {
         log(request.responseText);
-        document.getElementById('delayMs').innerText = request.responseText;
+        if (request.responseText) {
+            response = JSON.parse(request.responseText);
+            document.getElementById('delayMs').innerText = response.delayMs;
+            document.getElementById('hero').className = response.hero;
+        }
     }
 }
 
@@ -90,8 +96,9 @@ function message(msg) {
 
 function disableButton(value) {
     log('disableButton() value: ' + value);
-    var result = document.getElementById('result');
-    result.innerHTML = '<p></p><input class="button is-primary is-large is-fullwidth" disabled type="button" value="' + value + '" />';
+    document.getElementById('delayMs').innerText = '';
+    document.getElementById('hero').className = 'hero';
+    document.getElementById('result').innerHTML = '<p></p><input class="button is-primary is-large is-fullwidth" disabled type="button" value="' + value + '" />';
 }
 
 function log(body) {
