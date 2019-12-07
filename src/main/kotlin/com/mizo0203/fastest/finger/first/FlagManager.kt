@@ -32,12 +32,12 @@ internal class FlagManager private constructor() {
             }
         }
 
-    fun challenge(id: Int): Long {
+    fun challenge(id: Int, nickname: String): Long {
         var params: Params? = null
         var delayMs = 0L
         synchronized(mFlagIdLockObject) {
             if (mParams.flagId == -1) {
-                mParams = Params(id, mParams.mSkipId, mParams.mSkipCnt, 0, "")
+                mParams = Params(id, mParams.mSkipId, mParams.mSkipCnt, -1, "$nickname さんが回答中")
                 params = mParams
                 mFlagTimeMs = System.currentTimeMillis()
             } else {
@@ -102,7 +102,7 @@ internal class FlagManager private constructor() {
             get() = if (mSkipCnt > -1) mSkipId else 0
 
         fun getMessage(id: Int): String {
-            return if (mMsgId == id) mMsg else ""
+            return if (mMsgId == id || mMsgId == -1) mMsg else ""
         }
     }
 

@@ -37,9 +37,10 @@ function connect() {
 }
 
 function send(id) {
-    log('send id: ' + id);
+    var nickname = document.getElementById('nickname').value;
+    log('send id: ' + id + ' nickname: ' + nickname);
     var request = new XMLHttpRequest();
-    request.open('GET', '/fastest-finger-first/challenge?id=' + id, false);
+    request.open('GET', '/fastest-finger-first/challenge?id=' + id + '&nickname=' + nickname, false);
     request.send(null);
     if (request.status === 200) {
         log(request.responseText);

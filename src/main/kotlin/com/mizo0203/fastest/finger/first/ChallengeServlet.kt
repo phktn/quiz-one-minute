@@ -30,7 +30,13 @@ class ChallengeServlet : HttpServlet() {
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
         req.characterEncoding = "UTF-8"
         val id = Integer.parseInt(req.getParameter("id"))
-        val delayMs = FlagManager.instance.challenge(id)
+        val nickname = req.getParameter("nickname")
+        if (nickname.isEmpty()) {
+            resp.characterEncoding = "UTF-8"
+            resp.writer.use { out -> out.print("ニックネームが未入力です！") }
+            return
+        }
+        val delayMs = FlagManager.instance.challenge(id, nickname)
         LOG.info("SendServlet doGet id: $id delayMs: $delayMs")
         if (delayMs != 0L) {
             resp.characterEncoding = "UTF-8"
