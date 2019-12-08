@@ -24,6 +24,7 @@ internal class FlagManager private constructor() {
     private var mCnt = 0
     private var mParams = Params(0, 0, 0, 0, "")
     private var mFlagTimeMs = -1L
+    private val respondentList: ArrayDeque<Pair<Int, String>> = ArrayDeque()
 
     val params: Params
         get() {
@@ -41,13 +42,36 @@ internal class FlagManager private constructor() {
                 params = mParams
                 mFlagTimeMs = System.currentTimeMillis()
             } else {
+                for (pair in respondentList) {
+                    if (pair.first == id) {
+                        return -1L
+                    }
+                }
                 delayMs = System.currentTimeMillis() - mFlagTimeMs
+                respondentList.add(Pair(id, nickname));
             }
         }
-        if (params != null) {
-            mListenerMap[id]?.onFlagIdChanged(params!!)
-        }
+        params?.let { mListenerMap[id]?.onFlagIdChanged(it) }
         return delayMs
+    }
+
+    fun advance(): Boolean {
+        synchronized(mFlagIdLockObject) {
+            if (respondentList.isEmpty()) {
+                return false
+            }
+        }
+        var params: Params
+        synchronized(mFlagIdLockObject) {
+            val pair = respondentList.pop()
+            mParams = Params(pair.first, mParams.mSkipId, mParams.mSkipCnt, -1, "${pair.second} さんが回答中 (繰り上げ)")
+            params = mParams
+            mFlagTimeMs = System.currentTimeMillis()
+        }
+        for (listener in mListenerMap.values) {
+            listener.onFlagIdChanged(params)
+        }
+        return true
     }
 
     fun start() {
@@ -55,6 +79,7 @@ internal class FlagManager private constructor() {
         synchronized(mFlagIdLockObject) {
             mParams = Params(-1, mParams.mSkipId, mParams.mSkipCnt - 1, 0, "")
             params = mParams
+            respondentList.clear()
         }
         for (listener in mListenerMap.values) {
             listener.onFlagIdChanged(params)

@@ -23,28 +23,19 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebServlet(name = "ChallengeServlet", urlPatterns = ["/challenge"])
-class ChallengeServlet : HttpServlet() {
+@WebServlet(name = "AdvanceServlet", urlPatterns = ["/advance"])
+class AdvanceServlet : HttpServlet() {
 
     @Throws(IOException::class)
-    override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
+    override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
         req.characterEncoding = "UTF-8"
-        val id = Integer.parseInt(req.getParameter("id"))
-        val nickname = req.getParameter("nickname")
-        if (nickname.isEmpty()) {
-            resp.characterEncoding = "UTF-8"
-            resp.writer.use { out -> out.print("{\"delayMs\":\"Nickname が未入力です！\",\"hero\":\"hero is-danger\"}") }
-            return
+        if (!FlagManager.instance.advance()) {
+            FlagManager.instance.start()
         }
-        val delayMs = FlagManager.instance.challenge(id, nickname)
-        LOG.info("SendServlet doGet id: $id delayMs: $delayMs")
-        if (delayMs != 0L && delayMs != -1L) {
-            resp.characterEncoding = "UTF-8"
-            resp.writer.use { out -> out.print("{\"delayMs\":\"$delayMs ms 遅れ\",\"hero\":\"hero\"}") }
-        }
+        LOG.info("AdvanceServlet doGet")
     }
 
     companion object {
-        private val LOG = Logger.getLogger(ChallengeServlet::class.java.name)
+        private val LOG = Logger.getLogger(AdvanceServlet::class.java.name)
     }
 }

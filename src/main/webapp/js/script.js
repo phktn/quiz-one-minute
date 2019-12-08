@@ -88,6 +88,12 @@ function skip(msg) {
     request.send(msg);
 }
 
+function advance() {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/fastest-finger-first/advance', false);
+    request.send(null);
+}
+
 function message(msg) {
     var request = new XMLHttpRequest();
     request.open('POST', '/fastest-finger-first/message', false);
