@@ -2,12 +2,20 @@
 
 ## 概要 / Overview
 
-<img align="right" src="images/IMG_0018.png" />
-<img align="right" src="images/IMG_0017.png" />
-
 ブラウザ上で動く「早押しボタン」です。
 
 管理画面からスタートすると、現在ブラウザ上で表示されているすべての「早押しボタン」がアクティブになります。
+
+## スクリーンショット / Screenshots
+
+### 早押し画面
+
+[<img src='images/IMG_0053.PNG' width='256'/>](images/IMG_0053.PNG)
+[<img src='images/IMG_0054.PNG' width='256'/>](images/IMG_0054.PNG)
+
+### 管理画面
+
+[<img src='images/IMG_0055.PNG' width='256'/>](images/IMG_0055.PNG)
 
 ## How to run
 
