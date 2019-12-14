@@ -33,7 +33,7 @@ class ChallengeServlet : HttpServlet() {
         val nickname = req.getParameter("nickname")
         if (nickname.isEmpty()) {
             resp.characterEncoding = "UTF-8"
-            resp.writer.use { out -> out.print("{\"delayMs\":\"Nickname が未入力です！\",\"hero\":\"hero is-danger\"}") }
+            resp.writer.use { out -> out.print("{\"delayMs\":\"ニックネームが未入力です！\",\"hero\":\"hero is-danger\"}") }
             return
         }
         val delayMs = FlagManager.instance.challenge(id, nickname)
