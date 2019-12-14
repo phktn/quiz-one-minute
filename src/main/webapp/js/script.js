@@ -19,7 +19,7 @@ function connect() {
                     var newLine = lines[lines.length - 2];
                     log('onreadystatechange newLine: ' + newLine);
                     response = JSON.parse(newLine);
-                    document.getElementById('delayMs').innerText = response.delayMs;
+                    document.getElementById('delayMs').innerHTML = response.delayMs;
                     document.getElementById('hero').className = response.hero;
                     document.getElementById('result').innerHTML = response.button;
                 }
@@ -48,7 +48,7 @@ function send(id) {
         log(request.responseText);
         if (request.responseText) {
             response = JSON.parse(request.responseText);
-            document.getElementById('delayMs').innerText = response.delayMs;
+            document.getElementById('delayMs').innerHTML = response.delayMs;
             document.getElementById('hero').className = response.hero;
         }
     }
