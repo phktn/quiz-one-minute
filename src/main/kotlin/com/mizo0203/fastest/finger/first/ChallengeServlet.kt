@@ -38,9 +38,10 @@ class ChallengeServlet : HttpServlet() {
         }
         val delayMs = FlagManager.instance.challenge(id, nickname)
         LOG.info("SendServlet doGet id: $id delayMs: $delayMs")
+        val delayS = delayMs / 1000f
         if (delayMs != 0L && delayMs != -1L) {
             resp.characterEncoding = "UTF-8"
-            resp.writer.use { out -> out.print("{\"delayMs\":\"$delayMs ms 遅れ\",\"hero\":\"hero\"}") }
+            resp.writer.use { out -> out.print("{\"delayMs\":\"<b>$delayS</b> 秒 遅れ\",\"hero\":\"hero\"}") }
         }
     }
 
