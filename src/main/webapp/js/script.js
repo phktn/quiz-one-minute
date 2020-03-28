@@ -7,35 +7,28 @@ window.onload = function (e) {
 }
 
 function connect() {
-    log('connect()');
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-        log('onreadystatechange readyState: ' + req.readyState + ' status: ' + req.status);
-        switch (req.readyState) {
-            case XMLHttpRequest.LOADING: // 3: ダウンロード中
-                if (req.status == 200) { // 通信の成功時
-                    reconnectWait = 0;
-                    var lines = req.responseText.split("\n");
-                    var newLine = lines[lines.length - 2];
-                    log('onreadystatechange newLine: ' + newLine);
-                    response = JSON.parse(newLine);
-                    document.getElementById('delayMs').innerHTML = response.delayMs;
-                    document.getElementById('hero').className = response.hero;
-                    document.getElementById('result').innerHTML = response.button;
-                }
-                break;
-            case XMLHttpRequest.DONE:    // 4: 操作が完了した
-                reconnect();
-                break;
-            case XMLHttpRequest.UNSENT:
-            case XMLHttpRequest.OPENED:
-            case XMLHttpRequest.HEADERS_RECEIVED:
-            default:
-                break;
-        }
+    console.log('connect()');
+    if (!window.EventSource) {
+        console.log("YOUR BROWSER DOES NOT SUPPORT SSE");
+        return;
     }
-    req.open('GET', '/fastest-finger-first/stream', true);
-    req.send(null);
+    const source = new EventSource('/fastest-finger-first/stream');
+    source.addEventListener('message', function (e) {
+        console.log('message data: ' + e.data);
+        response = JSON.parse(e.data);
+        document.getElementById('delayMs').innerHTML = response.delayMs;
+        document.getElementById('hero').className = response.hero;
+        document.getElementById('result').innerHTML = response.button;
+    }, false);
+    source.addEventListener('open', function (e) {
+        console.log("Connecting to the chat server..." + e);
+    }, false);
+    source.addEventListener('error', function (e) {
+        if (e.readyState == EventSource.CLOSED) {
+            console.log("**** ERROR: " + e);
+            reconnect();
+        }
+    }, false);
 }
 
 function send(id) {
@@ -109,7 +102,4 @@ function disableButton(value) {
 
 function log(body) {
     document.getElementById('log').innerText = body + "\n" + document.getElementById('log').innerText;
-//    var request = new XMLHttpRequest();
-//    request.open('POST', '/fastest-finger-first/log', false);
-//    request.send(body);
 }

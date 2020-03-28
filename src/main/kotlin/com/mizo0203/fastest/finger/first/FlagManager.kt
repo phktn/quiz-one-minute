@@ -17,11 +17,11 @@
 package com.mizo0203.fastest.finger.first
 
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 internal class FlagManager private constructor() {
-    private val mListenerMap = HashMap<Int, Listener>()
+    private val mListenerMap = ConcurrentHashMap<Int, Listener>()
     private val mFlagIdLockObject = Any()
-    private var mCnt = 0
     private var mParams = Params(0, 0, 0, 0, "")
     private var mFlagTimeMs = -1L
     private val respondentList: ArrayDeque<Pair<Int, String>> = ArrayDeque()
@@ -51,7 +51,12 @@ internal class FlagManager private constructor() {
                 respondentList.add(Pair(id, nickname));
             }
         }
-        params?.let { mListenerMap[id]?.onFlagIdChanged(it) }
+        params?.let {
+            for (listener in mListenerMap.values) {
+                listener.onFlagIdChanged(it)
+            }
+        }
+
         return delayMs
     }
 
@@ -108,9 +113,8 @@ internal class FlagManager private constructor() {
         }
     }
 
-    fun registerListener(listener: Listener): Int {
-        mListenerMap[++mCnt] = listener
-        return mCnt
+    fun registerListener(id: Int, listener: Listener) {
+        mListenerMap[id] = listener
     }
 
     fun unregisterListener(id: Int) {

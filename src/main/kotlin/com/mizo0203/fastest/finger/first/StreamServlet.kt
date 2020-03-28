@@ -17,89 +17,66 @@
 package com.mizo0203.fastest.finger.first
 
 import com.mizo0203.fastest.finger.first.FlagManager.Params
+import info.macias.sse.servlet3.ServletEventTarget
 import java.io.IOException
-import java.io.PrintWriter
-import java.util.concurrent.CountDownLatch
+import java.nio.charset.StandardCharsets
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebServlet(name = "StreamServlet", urlPatterns = ["/stream"])
+@WebServlet(name = "StreamServlet", urlPatterns = ["/stream"], asyncSupported = true)
 class StreamServlet : HttpServlet() {
 
-    private val mLatchLockObject = Any()
-
-    private var mLatch = MyCountDownLatch(1)
-
-    private val syncedLatch: MyCountDownLatch
-        get() {
-            synchronized(mLatchLockObject) {
-                return mLatch
+    private val syncedCounter = object {
+        private var mCnt = 0
+        fun up(): Int {
+            synchronized(this) {
+                return ++mCnt
             }
         }
+    }
 
     @Throws(IOException::class)
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
         req.characterEncoding = "UTF-8"
         resp.characterEncoding = "UTF-8"
-        resp.contentType = "application/octet-stream"
-        val id = FlagManager.instance.registerListener(object : FlagManager.Listener {
+        val target = ServletEventTarget(req).ok().open()
+        val id = syncedCounter.up()
+        FlagManager.instance.registerListener(id, object : FlagManager.Listener {
             override fun onFlagIdChanged(params: Params) {
-                countDown(params)
+                try {
+                    printOutButton(target, params, id)
+                } catch (e: IOException) {
+                    FlagManager.instance.unregisterListener(id)
+                }
             }
         })
-        try {
-            resp.writer.use { out ->
-                printOutButton(out, FlagManager.instance.params, id)
-                try {
-                    while (true) {
-                        val latch = syncedLatch
-                        latch.await()
-                        latch.mParams?.let { printOutButton(out, it, id) }
-                    }
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-            }
-        } finally {
-            FlagManager.instance.unregisterListener(id)
-        }
+        printOutButton(target, FlagManager.instance.params, id)
     }
 
-    private fun printOutButton(out: PrintWriter, params: Params, id: Int) {
+    @Throws(IOException::class)
+    private fun printOutButton(target: ServletEventTarget, params: Params, id: Int) {
         val msg = params.getMessage(id)
-        if (params.flagId == -1) {
+        val data = if (params.flagId == -1) {
             if (params.skipId != id) {
-                out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}")
+                "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
             } else {
-                out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}")
+                "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}"
             }
         } else if (params.flagId == id) {
-            out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero is-primary\",\"button\":\"<input class=\\\"button is-primary is-inverted is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Please answer !\\\" />\"}")
+            "{\"delayMs\":\"$msg\",\"hero\":\"hero is-primary\",\"button\":\"<input class=\\\"button is-primary is-inverted is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Please answer !\\\" />\"}"
         } else {
             if (params.flagId == 0) {
-                out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Wait...\\\" />\"}")
+                "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Wait...\\\" />\"}"
             } else {
                 if (params.skipId != id) {
-                    out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}")
+                    "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
                 } else {
-                    out.println("{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}")
+                    "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}"
                 }
             }
         }
-        out.flush()
-    }
-
-    private fun countDown(params: Params) {
-        synchronized(mLatchLockObject) {
-            mLatch.mParams = params
-            mLatch.countDown()
-            mLatch = MyCountDownLatch(1)
-        }
-    }
-
-    private class MyCountDownLatch(count: Int) : CountDownLatch(count) {
-        internal var mParams: Params? = null
+        target.send("message", String(data.toByteArray(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1))
     }
 }
