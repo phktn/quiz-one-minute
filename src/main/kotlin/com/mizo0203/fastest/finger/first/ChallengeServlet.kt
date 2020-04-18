@@ -36,13 +36,8 @@ class ChallengeServlet : HttpServlet() {
             resp.writer.use { out -> out.print("{\"delayMs\":\"ニックネームが未入力です！\",\"hero\":\"hero is-danger\"}") }
             return
         }
-        val delayMs = FlagManager.instance.challenge(id, nickname)
-        LOG.info("SendServlet doGet id: $id delayMs: $delayMs")
-        val delayS = delayMs / 1000f
-        if (delayMs != 0L && delayMs != -1L) {
-            resp.characterEncoding = "UTF-8"
-            resp.writer.use { out -> out.print("{\"delayMs\":\"<b>$delayS</b> 秒 遅れ\",\"hero\":\"hero\"}") }
-        }
+        FlagManager.instance.challenge(id, nickname)
+        LOG.info("SendServlet doGet id: $id")
     }
 
     companion object {
