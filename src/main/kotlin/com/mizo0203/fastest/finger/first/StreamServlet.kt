@@ -58,7 +58,7 @@ class StreamServlet : HttpServlet() {
     @Throws(IOException::class)
     private fun printOutButton(target: ServletEventTarget, params: Params, id: Int) {
         val msg = params.getMessage(id)
-        val data = if (params.flagId == -1) {
+        val data = if (params.flagId == FlagManager.USER_ID_ALL) {
             if (params.skipId != id) {
                 "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
             } else {
@@ -67,7 +67,7 @@ class StreamServlet : HttpServlet() {
         } else if (params.flagId == id) {
             "{\"delayMs\":\"$msg\",\"hero\":\"hero is-primary\",\"button\":\"<input class=\\\"button is-primary is-inverted is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Please answer !\\\" />\"}"
         } else {
-            if (params.flagId == 0) {
+            if (params.flagId == FlagManager.USER_ID_NONE) {
                 "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Wait...\\\" />\"}"
             } else {
                 if (params.skipId != id) {
