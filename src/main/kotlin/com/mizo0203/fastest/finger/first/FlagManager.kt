@@ -18,13 +18,13 @@ package com.mizo0203.fastest.finger.first
 
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.ArrayList
 
 internal class FlagManager private constructor() {
     private val mListenerMap = ConcurrentHashMap<Int, Listener>()
     private val mFlagIdLockObject = Any()
-    private var mParams = Params(USER_ID_NONE, USER_ID_NONE, USER_ID_NONE, USER_ID_NONE, "")
+    private var mParams = Params(emptyList(), USER_ID_NONE, USER_ID_NONE, USER_ID_NONE, "")
     private var mFlagTimeMs = -1L
-    private val respondentList: ArrayDeque<Pair<Int, String>> = ArrayDeque()
 
     val params: Params
         get() {
@@ -36,18 +36,20 @@ internal class FlagManager private constructor() {
     fun challenge(id: Int, nickname: String): Long {
         var delayMs = 0L
         val params = synchronized(mFlagIdLockObject) {
-            if (mParams.flagId == USER_ID_ALL) {
-                mParams = Params(id, mParams.mSkipId, mParams.mSkipCnt, USER_ID_ALL, "$nickname さんが回答中")
+            if (mParams.flagIds.isEmpty()) {
+                mParams = Params(listOf(Pair(id, nickname)), mParams.mSkipId, mParams.mSkipCnt, USER_ID_ALL, "$nickname さんが回答中")
                 mFlagTimeMs = System.currentTimeMillis()
                 return@synchronized mParams
             } else {
-                for (pair in respondentList) {
+                for (pair in mParams.flagIds) {
                     if (pair.first == id) {
                         return -1L
                     }
                 }
                 delayMs = System.currentTimeMillis() - mFlagTimeMs
+                val respondentList = ArrayDeque(mParams.flagIds)
                 respondentList.add(Pair(id, nickname))
+                mParams = Params(ArrayList(respondentList), mParams.mSkipId, mParams.mSkipCnt, mParams.mMsgId, mParams.mMsg)
                 return@synchronized null
             }
         }
@@ -61,14 +63,14 @@ internal class FlagManager private constructor() {
     }
 
     fun advance(): Boolean {
-        synchronized(mFlagIdLockObject) {
+        val params = synchronized(mFlagIdLockObject) {
+            val respondentList = ArrayDeque(mParams.flagIds)
             if (respondentList.isEmpty()) {
                 return false
             }
-        }
-        val params = synchronized(mFlagIdLockObject) {
-            val pair = respondentList.pop()
-            mParams = Params(pair.first, mParams.mSkipId, mParams.mSkipCnt, USER_ID_ALL, "${pair.second} さんが回答中 (繰り上げ)")
+            respondentList.pop()
+            val nickname = respondentList.last.second
+            mParams = Params(ArrayList(respondentList), mParams.mSkipId, mParams.mSkipCnt, USER_ID_ALL, "${nickname} さんが回答中 (繰り上げ)")
             mFlagTimeMs = System.currentTimeMillis()
             return@synchronized mParams
         }
@@ -80,8 +82,7 @@ internal class FlagManager private constructor() {
 
     fun start() {
         val params = synchronized(mFlagIdLockObject) {
-            mParams = Params(USER_ID_ALL, mParams.mSkipId, mParams.mSkipCnt - 1, USER_ID_NONE, "")
-            respondentList.clear()
+            mParams = Params(emptyList(), mParams.mSkipId, mParams.mSkipCnt - 1, USER_ID_NONE, "")
             return@synchronized mParams
         }
         for (listener in mListenerMap.values) {
@@ -91,7 +92,7 @@ internal class FlagManager private constructor() {
 
     fun skip(msg: String) {
         val params = synchronized(mFlagIdLockObject) {
-            mParams = Params(mParams.flagId, mParams.flagId, 1, mParams.flagId, msg)
+            mParams = Params(mParams.flagIds, mParams.flagId, 1, mParams.flagId, msg)
             return@synchronized mParams
         }
         for (listener in mListenerMap.values) {
@@ -101,7 +102,7 @@ internal class FlagManager private constructor() {
 
     fun message(msg: String) {
         val params = synchronized(mFlagIdLockObject) {
-            mParams = Params(mParams.flagId, mParams.mSkipId, mParams.mSkipCnt, mParams.flagId, msg)
+            mParams = Params(mParams.flagIds, mParams.mSkipId, mParams.mSkipCnt, mParams.flagId, msg)
             return@synchronized mParams
         }
         for (listener in mListenerMap.values) {
@@ -124,13 +125,19 @@ internal class FlagManager private constructor() {
     /**
      * @param mSkipId お休み中の ID
      */
-    internal class Params(val flagId: Int, val mSkipId: Int, val mSkipCnt: Int, private val mMsgId: Int, private val mMsg: String) {
+    internal class Params(val flagIds: List<Pair<Int, String>>, val mSkipId: Int, val mSkipCnt: Int, val mMsgId: Int, val mMsg: String) {
 
         /**
          * お休み中の ID
          */
         val skipId: Int
             get() = if (mSkipCnt > -1) mSkipId else USER_ID_NONE
+
+        /**
+         * 回答中の ID
+         */
+        val flagId: Int
+            get() = if (flagIds.isEmpty()) USER_ID_ALL else flagIds.get(0).first
 
         fun getMessage(id: Int): String {
             return if (mMsgId == id || mMsgId == USER_ID_ALL) mMsg else ""
