@@ -32,7 +32,7 @@ internal class FlagManager private constructor() {
             }
         }
 
-    fun challenge(id: Int, nickname: String) {
+    fun challenge(id: Int, nickname: String): Params {
         val params = synchronized(mFlagIdLockObject) {
             if (mParams.flagIds.isEmpty()) {
                 mParams = Params(listOf(UserData(id, nickname, System.currentTimeMillis())), mParams.mSkipId, mParams.mSkipCnt, USER_ID_ALL, "$nickname さんが回答中")
@@ -40,7 +40,7 @@ internal class FlagManager private constructor() {
             } else {
                 for (pair in mParams.flagIds) {
                     if (pair.userId == id) {
-                        return
+                        return mParams
                     }
                 }
                 val respondentList = ArrayDeque(mParams.flagIds)
@@ -54,6 +54,8 @@ internal class FlagManager private constructor() {
         for (listener in mListenerMap.values) {
             listener.onFlagIdChanged(params)
         }
+
+        return params
     }
 
     fun advance(): Boolean {
