@@ -25,7 +25,7 @@ And access to http://localhost:8080/fastest-finger-first/
 
 ## ライセンス / License
 
-    Copyright 2019 Tatsuki Kamiya / Satoki Mizoguchi
+    Copyright 2019 P Hackathon
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
