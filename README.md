@@ -2,20 +2,11 @@
 
 ## 概要 / Overview
 
-ブラウザ上で動く「早押しボタン」です。
-
-管理画面からスタートすると、現在ブラウザ上で表示されているすべての「早押しボタン」がアクティブになります。
+現代は時間との戦いです。
 
 ## スクリーンショット / Screenshots
 
-### 早押し画面
-
-[<img src='images/IMG_0053.PNG' width='256'/>](images/IMG_0053.PNG)
-[<img src='images/IMG_0054.PNG' width='256'/>](images/IMG_0054.PNG)
-
-### 管理画面
-
-[<img src='images/IMG_0055.PNG' width='256'/>](images/IMG_0055.PNG)
+[<img src='images/Screenshot.png' width='256'/>](images/Screenshot.png)
 
 ## How to run
 
@@ -25,7 +16,7 @@ And access to http://localhost:8080/quiz-one-minute/
 
 ## ライセンス / License
 
-    Copyright 2019 P Hackathon
+    Copyright 2020 P Hackathon
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
