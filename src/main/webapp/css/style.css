@@ -3,19 +3,23 @@ td, th {
     height: 20px;
 }
 
-td.aaa {
+td.corner {
     width: 80px;
     height: 80px;
 }
 
 /* http://www.htmq.com/style/border.shtml */
-td.bbb {
-    background-color: greenyellow;
+td.visible-success {
+    background-color: hsl(141, 53%, 53%);
     border: 2px solid black;
 }
 
-td.ccc {
-    background-color: red;
+td.visible-danger {
+    background-color: hsl(348, 100%, 61%);
+    border: 2px solid black;
+}
+
+td.invisible {
     border: 2px solid black;
 }
 

@@ -60,20 +60,20 @@ class StreamServlet : HttpServlet() {
         val msg = params.getMessage(id)
         val data = if (params.flagId == FlagManager.USER_ID_ALL) {
             if (params.skipId != id) {
-                "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
+                "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
             } else {
-                "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}"
+                "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}"
             }
         } else if (params.flagId == id) {
             "{\"delayMs\":\"$msg\",\"hero\":\"hero is-primary\",\"button\":\"<input class=\\\"button is-primary is-inverted is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Please answer !\\\" />\"}"
         } else {
             if (params.flagId == FlagManager.USER_ID_NONE) {
-                "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Wait...\\\" />\"}"
+                "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"Wait...\\\" />\"}"
             } else {
                 if (params.skipId != id) {
-                    "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
+                    "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
                 } else {
-                    "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}"
+                    "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}"
                 }
             }
         }

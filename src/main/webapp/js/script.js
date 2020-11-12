@@ -96,7 +96,7 @@ function message(msg) {
 function disableButton(value) {
     log('disableButton() value: ' + value);
     document.getElementById('delayMs').innerText = '';
-    document.getElementById('hero').className = 'hero';
+    document.getElementById('hero').className = 'hero is-dark';
     document.getElementById('result').innerHTML = '<p></p><input class="button is-primary is-large is-fullwidth" disabled type="button" value="' + value + '" />';
 }
 
