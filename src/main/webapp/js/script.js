@@ -1,4 +1,5 @@
 var reconnectWait;
+let animationId = 0;
 
 window.onload = function (e) {
     log('onload');
@@ -22,6 +23,7 @@ function connect() {
     }, false);
     source.addEventListener('open', function (e) {
         console.log("Connecting to the chat server..." + e);
+        startAnimation();
     }, false);
     source.addEventListener('error', function (e) {
         if (e.readyState == EventSource.CLOSED) {
@@ -45,6 +47,25 @@ function send(id) {
             document.getElementById('hero').className = response.hero;
         }
     }
+}
+
+function startAnimation() {
+    let elements = [];
+    let animationCnt = 0;
+    for (let i = 1; i <= 60; i++) {
+        elements.push(document.getElementById('light-' + ('00' + i).slice(-2)));
+    }
+    animationId = setInterval(function handler() {
+        animationCnt++;
+        for (const i in elements) {
+            if (Math.floor((i - animationCnt) / 5) % 3 == 0) {
+                elements[i].className = `invisible`;
+            } else {
+                elements[i].className = `visible-success`;
+            }
+        }
+        return handler;
+    }(), 200);
 }
 
 function reconnect() {

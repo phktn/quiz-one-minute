@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport" />
+    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport"/>
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" rel="stylesheet">
     <link href="/quiz-one-minute/css/style.css" rel="stylesheet">
     <link href="https://avatars.githubusercontent.com/phktn" rel="icon" type="image/png">
@@ -12,46 +12,348 @@
 </head>
 
 <body style="height: 100%;">
-    <section class="hero is-dark" id="hero" style="min-height: 100%;">
-        <div class="hero-head has-text-centered">
-            <section class="section">
-                <h1 class="title">クイズ・ワンミニッツ</h1>
-                <h2 class="subtitle">- QUIZ ONE MINUTE -</h2>
-                <h2 class="subtitle" id="delayMs" style="display:none;"></h2>
-            </section>
+<section class="hero is-dark" id="hero" style="min-height: 100%;">
+    <div class="hero-head has-text-centered">
+        <section class="section">
+            <h1 class="title">クイズ・ワンミニッツ</h1>
+            <h2 class="subtitle">- QUIZ ONE MINUTE -</h2>
+            <h2 class="subtitle" id="delayMs" style="display:none;"></h2>
+        </section>
+    </div>
+    <div class="hero-body has-text-centered">
+        <div class="container">
+            <div id="log" style="display:none;">EOF</div>
         </div>
-        <div class="hero-body has-text-centered">
-            <div class="container">
-                <div id="log" style="display:none;">EOF</div>
-            </div>
-            <div class="container">
-                <table>
-                    <tr><td class="corner"></td><td></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td></td><td class="corner"></td></tr>
-                    <tr><td></td><td></td><td class="visible-danger" colspan="5"></td><td class="visible-danger" colspan="5"></td><td class="visible-danger" colspan="5"></td><td class="visible-danger" colspan="5"></td><td></td><td></td></tr>
-                    <tr><td class="visible-success"></td><td class="visible-danger" rowspan="5"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-danger" rowspan="5"></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td class="visible-danger" rowspan="5"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-danger" rowspan="5"></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td class="visible-success"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="visible-success"></td></tr>
-                    <tr><td></td><td></td><td class="visible-danger" colspan="5"></td><td class="visible-danger" colspan="5"></td><td class="visible-danger" colspan="5"></td><td class="visible-danger" colspan="5"></td><td></td><td></td></tr>
-                    <tr><td class="corner"></td><td></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td class="visible-success"></td><td></td><td class="corner"></td></tr>
-                </table>
-            </div>
+        <div class="container">
+            <table>
+                <tr>
+                    <td class="corner"></td>
+                    <td></td>
+                    <td class="visible-success" id="light-51"></td>
+                    <td class="visible-success" id="light-52"></td>
+                    <td class="visible-success" id="light-53"></td>
+                    <td class="visible-success" id="light-54"></td>
+                    <td class="visible-success" id="light-55"></td>
+                    <td class="visible-success" id="light-56"></td>
+                    <td class="visible-success" id="light-57"></td>
+                    <td class="visible-success" id="light-58"></td>
+                    <td class="visible-success" id="light-59"></td>
+                    <td class="visible-success" id="light-60"></td>
+                    <td class="visible-success" id="light-01"></td>
+                    <td class="visible-success" id="light-02"></td>
+                    <td class="visible-success" id="light-03"></td>
+                    <td class="visible-success" id="light-04"></td>
+                    <td class="visible-success" id="light-05"></td>
+                    <td class="visible-success" id="light-06"></td>
+                    <td class="visible-success" id="light-07"></td>
+                    <td class="visible-success" id="light-08"></td>
+                    <td class="visible-success" id="light-09"></td>
+                    <td class="visible-success" id="light-10"></td>
+                    <td></td>
+                    <td class="corner"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-50"></td>
+                    <td class="visible-danger" rowspan="5"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-danger" rowspan="5"></td>
+                    <td class="visible-success" id="light-11"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-49"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-12"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-48"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-13"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-47"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-14"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-46"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-15"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-45"></td>
+                    <td class="visible-danger" rowspan="5"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-danger" rowspan="5"></td>
+                    <td class="visible-success" id="light-16"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-44"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-17"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-43"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-18"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-42"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-19"></td>
+                </tr>
+                <tr>
+                    <td class="visible-success" id="light-41"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-success" id="light-20"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td class="visible-danger" colspan="5"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="corner"></td>
+                    <td></td>
+                    <td class="visible-success" id="light-40"></td>
+                    <td class="visible-success" id="light-39"></td>
+                    <td class="visible-success" id="light-38"></td>
+                    <td class="visible-success" id="light-37"></td>
+                    <td class="visible-success" id="light-36"></td>
+                    <td class="visible-success" id="light-35"></td>
+                    <td class="visible-success" id="light-34"></td>
+                    <td class="visible-success" id="light-33"></td>
+                    <td class="visible-success" id="light-32"></td>
+                    <td class="visible-success" id="light-31"></td>
+                    <td class="visible-success" id="light-30"></td>
+                    <td class="visible-success" id="light-29"></td>
+                    <td class="visible-success" id="light-28"></td>
+                    <td class="visible-success" id="light-27"></td>
+                    <td class="visible-success" id="light-26"></td>
+                    <td class="visible-success" id="light-25"></td>
+                    <td class="visible-success" id="light-24"></td>
+                    <td class="visible-success" id="light-23"></td>
+                    <td class="visible-success" id="light-22"></td>
+                    <td class="visible-success" id="light-21"></td>
+                    <td></td>
+                    <td class="corner"></td>
+                </tr>
+            </table>
         </div>
-        <div class="hero-foot has-text-centered">
-            <section class="section">
-                <div class="container" id="result" style="display:none;"></div>
-            </section>
-            <div class="container">Powered by P Hackathon,<br />Licensed under the Apache-2.0.
-            </div>
+    </div>
+    <div class="hero-foot has-text-centered">
+        <section class="section">
+            <div class="container" id="result" style="display:none;"></div>
+        </section>
+        <div class="container">Powered by P Hackathon,<br/>Licensed under the Apache-2.0.
         </div>
-    </section>
-    <script src="js/script.js"></script>
+    </div>
+</section>
+<script src="js/script.js"></script>
 </body>
 
 </html>
