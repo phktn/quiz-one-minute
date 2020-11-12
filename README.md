@@ -1,4 +1,4 @@
-# 早押しボタン
+# QUIZ ONE MINUTE
 
 ## 概要 / Overview
 
@@ -21,7 +21,7 @@
 
 `$ ./gradlew tomcatRun`
 
-And access to http://localhost:8080/fastest-finger-first/
+And access to http://localhost:8080/quiz-one-minute/
 
 ## ライセンス / License
 

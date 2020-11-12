@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, P Hackathon
+ * Copyright 2020, P Hackathon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mizo0203.fastest.finger.first
+package com.mizo0203.quiz.one.minute
 
 import java.io.IOException
 import java.util.logging.Logger
@@ -23,17 +23,17 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebServlet(name = "MessageServlet", urlPatterns = ["/message"])
-class MessageServlet : HttpServlet() {
+@WebServlet(name = "StartServlet", urlPatterns = ["/start"])
+class StartServlet : HttpServlet() {
 
     @Throws(IOException::class)
     override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
         req.characterEncoding = "UTF-8"
-        req.reader.use { `in` -> FlagManager.instance.message(`in`.readLine()) }
-        LOG.info("MessageServlet doPost")
+        FlagManager.instance.start()
+        LOG.info("StartServlet doGet")
     }
 
     companion object {
-        private val LOG = Logger.getLogger(MessageServlet::class.java.name)
+        private val LOG = Logger.getLogger(StartServlet::class.java.name)
     }
 }

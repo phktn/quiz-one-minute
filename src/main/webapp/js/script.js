@@ -12,7 +12,7 @@ function connect() {
         console.log("YOUR BROWSER DOES NOT SUPPORT SSE");
         return;
     }
-    const source = new EventSource('/fastest-finger-first/stream');
+    const source = new EventSource('/quiz-one-minute/stream');
     source.addEventListener('message', function (e) {
         console.log('message data: ' + e.data);
         response = JSON.parse(e.data);
@@ -35,7 +35,7 @@ function send(id) {
     var nickname = document.getElementById('nickname').value;
     log('send id: ' + id + ' nickname: ' + nickname);
     var request = new XMLHttpRequest();
-    request.open('GET', '/fastest-finger-first/challenge?id=' + id + '&nickname=' + nickname, false);
+    request.open('GET', '/quiz-one-minute/challenge?id=' + id + '&nickname=' + nickname, false);
     request.send(null);
     if (request.status === 200) {
         log(request.responseText);
@@ -71,25 +71,25 @@ function reconnect() {
 
 function start() {
     var request = new XMLHttpRequest();
-    request.open('POST', '/fastest-finger-first/start', false);
+    request.open('POST', '/quiz-one-minute/start', false);
     request.send(null);
 }
 
 function skip(msg) {
     var request = new XMLHttpRequest();
-    request.open('POST', '/fastest-finger-first/skip', false);
+    request.open('POST', '/quiz-one-minute/skip', false);
     request.send(msg);
 }
 
 function advance() {
     var request = new XMLHttpRequest();
-    request.open('POST', '/fastest-finger-first/advance', false);
+    request.open('POST', '/quiz-one-minute/advance', false);
     request.send(null);
 }
 
 function message(msg) {
     var request = new XMLHttpRequest();
-    request.open('POST', '/fastest-finger-first/message', false);
+    request.open('POST', '/quiz-one-minute/message', false);
     request.send(msg);
 }
 

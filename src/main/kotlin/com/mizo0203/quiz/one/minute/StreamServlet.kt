@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, P Hackathon
+ * Copyright 2020, P Hackathon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,39 +14,51 @@
  * limitations under the License.
  */
 
-package com.mizo0203.fastest.finger.first
+package com.mizo0203.quiz.one.minute
 
+import com.mizo0203.quiz.one.minute.FlagManager.Params
+import info.macias.sse.servlet3.ServletEventTarget
 import java.io.IOException
-import java.io.PrintWriter
-import java.util.logging.Logger
+import java.nio.charset.StandardCharsets
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebServlet(name = "ChallengeServlet", urlPatterns = ["/challenge"])
-class ChallengeServlet : HttpServlet() {
+@WebServlet(name = "StreamServlet", urlPatterns = ["/stream"], asyncSupported = true)
+class StreamServlet : HttpServlet() {
+
+    private val syncedCounter = object {
+        private var mCnt = 0
+        fun up(): Int {
+            synchronized(this) {
+                return ++mCnt
+            }
+        }
+    }
 
     @Throws(IOException::class)
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
         req.characterEncoding = "UTF-8"
         resp.characterEncoding = "UTF-8"
-        val id = Integer.parseInt(req.getParameter("id"))
-        val nickname = req.getParameter("nickname")
-        if (nickname.isEmpty()) {
-            resp.writer.use { out -> out.print("{\"delayMs\":\"ニックネームが未入力です！\",\"hero\":\"hero is-danger\"}") }
-            return
-        }
-        val params = FlagManager.instance.challenge(id, nickname)
-        resp.writer.use { out -> printOutButton(out, params, id) }
-        LOG.info("SendServlet doGet id: $id")
+        val target = ServletEventTarget(req).ok().open()
+        val id = syncedCounter.up()
+        FlagManager.instance.registerListener(id, object : FlagManager.Listener {
+            override fun onFlagIdChanged(params: Params) {
+                try {
+                    printOutButton(target, params, id)
+                } catch (e: IOException) {
+                    FlagManager.instance.unregisterListener(id)
+                }
+            }
+        })
+        printOutButton(target, FlagManager.instance.params, id)
     }
 
-    // FIXME: Jackson による JSON 変換
     @Throws(IOException::class)
-    private fun printOutButton(out: PrintWriter, params: FlagManager.Params, id: Int) {
+    private fun printOutButton(target: ServletEventTarget, params: Params, id: Int) {
         val msg = params.getMessage(id)
-        out.print(if (params.flagId == FlagManager.USER_ID_ALL) {
+        val data = if (params.flagId == FlagManager.USER_ID_ALL) {
             if (params.skipId != id) {
                 "{\"delayMs\":\"$msg\",\"hero\":\"hero\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" onclick=\\\"send($id);\\\" type=\\\"button\\\" value=\\\"PUSH !\\\"/>\"}"
             } else {
@@ -64,10 +76,7 @@ class ChallengeServlet : HttpServlet() {
                     "{\"delayMs\":\"$msg\",\"hero\":\"hero is-dark\",\"button\":\"<input class=\\\"button is-primary is-large is-fullwidth\\\" disabled type=\\\"button\\\" value=\\\"お休み中...\\\" />\"}"
                 }
             }
-        })
-    }
-
-    companion object {
-        private val LOG = Logger.getLogger(ChallengeServlet::class.java.name)
+        }
+        target.send("message", String(data.toByteArray(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1))
     }
 }

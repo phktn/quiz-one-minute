@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, P Hackathon
+ * Copyright 2020, P Hackathon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mizo0203.fastest.finger.first
+package com.mizo0203.quiz.one.minute
 
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
