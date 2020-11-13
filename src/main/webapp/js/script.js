@@ -55,6 +55,9 @@ function startAnimation() {
     for (let i = 1; i <= 60; i++) {
         elements.push(document.getElementById('light-' + ('00' + i).slice(-2)));
     }
+    if (animationId != 0) {
+        clearInterval(animationId);
+    }
     animationId = setInterval(function handler() {
         animationCnt++;
         for (const i in elements) {
