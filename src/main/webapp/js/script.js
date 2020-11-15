@@ -81,6 +81,33 @@ function startAnimation() {
     }(), 200);
 }
 
+function startAnimationOneMinute() {
+    let elements = [];
+    let animationCnt = 0;
+    for (let i = 1; i <= 12; i++) {
+        document.getElementById('correct-answer-lamp-' + i).className = `invisible`;
+    }
+    for (let i = 1; i <= 60; i++) {
+        elements.push(document.getElementById('light-' + ('00' + i).slice(-2)));
+    }
+    if (animationId != 0) {
+        clearInterval(animationId);
+    }
+    animationId = setInterval(function handler() {
+        animationCnt++;
+        if (animationCnt == 60) {
+            clearInterval(animationId);
+        }
+        for (let i = 0; i < animationCnt; i++) {
+            elements[i].className = `invisible`;
+        }
+        for (let i = animationCnt; i < 60; i++) {
+            elements[i].className = `visible-success`;
+        }
+        return handler;
+    }(), 1000);
+}
+
 function initProblemSetLamp() {
     for (let i = 1; i <= 10; i++) {
         document.getElementById('problem-set-lamp-selected-' + i).className = 'problem-set-lamp-off';
