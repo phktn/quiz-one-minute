@@ -32,8 +32,6 @@ function connect() {
     }, false);
     source.addEventListener('open', function (e) {
         console.log("Connecting to the chat server..." + e);
-        initProblemSetLamp();
-        startAnimation();
     }, false);
     source.addEventListener('error', function (e) {
         if (e.readyState == EventSource.CLOSED) {
@@ -88,12 +86,13 @@ function initProblemSetLamp() {
     }
 }
 
+function selectProblemSet(num) {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/quiz-one-minute/selectProblemSet', true);
+    request.send(num);
+}
+
 function onSelectProblemSet(num) {
-    for (let i = 1; i <= 10; i++) {
-        document.getElementById('problem-set-lamp-selected-' + i).className = 'problem-set-lamp-off';
-    }
-    document.getElementById('problem-set-lamp-selected-' + num).className = 'problem-set-lamp-selected-on';
-    document.getElementById('problem-set-lamp-selectable-' + num).className = 'problem-set-lamp-off';
 }
 
 function reconnect() {

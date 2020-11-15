@@ -103,6 +103,12 @@ internal class FlagManager private constructor() {
         }
     }
 
+    fun selectProblemSet(num: Int) {
+        for (listener in mListenerMap.values) {
+            listener.onSelectProblemSet(num)
+        }
+    }
+
     fun message(msg: String) {
         val params = synchronized(mFlagIdLockObject) {
             mParams = Params(mParams.flagIds, mParams.mSkipId, mParams.mSkipCnt, mParams.flagId, msg)
@@ -123,6 +129,8 @@ internal class FlagManager private constructor() {
 
     internal interface Listener {
         fun onFlagIdChanged(params: Params)
+
+        fun onSelectProblemSet(num: Int)
     }
 
     /**

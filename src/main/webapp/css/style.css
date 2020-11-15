@@ -9,6 +9,7 @@ td.corner {
 }
 
 /* http://www.htmq.com/style/border.shtml */
+
 td.visible-success {
     background-color: hsl(141, 53%, 53%);
     border: 2px solid black;
@@ -21,6 +22,18 @@ td.visible-danger {
 
 td.invisible {
     border: 2px solid black;
+}
+
+th.problem-set-lamp-selected-on {
+    color: hsl(48, 100%, 67%);
+}
+
+th.problem-set-lamp-selectable-on {
+    color: hsl(217, 71%, 53%);
+}
+
+th.problem-set-lamp-off {
+    color: #363636;
 }
 
 table {

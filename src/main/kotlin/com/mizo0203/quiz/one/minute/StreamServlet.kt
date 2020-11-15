@@ -16,6 +16,7 @@
 
 package com.mizo0203.quiz.one.minute
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.mizo0203.quiz.one.minute.FlagManager.Params
 import info.macias.sse.servlet3.ServletEventTarget
 import java.io.IOException
@@ -47,6 +48,15 @@ class StreamServlet : HttpServlet() {
             override fun onFlagIdChanged(params: Params) {
                 try {
                     printOutButton(target, params, id)
+                } catch (e: IOException) {
+                    FlagManager.instance.unregisterListener(id)
+                }
+            }
+
+            override fun onSelectProblemSet(num: Int) {
+                try {
+                    val jsonBytes = jacksonObjectMapper().writeValueAsBytes(ResponseProblemSet(num))
+                    target.send("message", String(jsonBytes, StandardCharsets.ISO_8859_1))
                 } catch (e: IOException) {
                     FlagManager.instance.unregisterListener(id)
                 }
