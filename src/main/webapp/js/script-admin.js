@@ -23,9 +23,6 @@ function connect() {
         if (response.hero != null) {
             document.getElementById('hero').className = response.hero;
         }
-        if (response.button != null) {
-            document.getElementById('result').innerHTML = response.button;
-        }
         if (response.problemSetNum > 0) {
             onSelectProblemSet(response.problemSetNum);
         }
@@ -128,7 +125,6 @@ function disableButton(value) {
     log('disableButton() value: ' + value);
     document.getElementById('delayMs').innerText = '';
     document.getElementById('hero').className = 'hero is-dark';
-    document.getElementById('result').innerHTML = '<p></p><input class="button is-primary is-large is-fullwidth" disabled type="button" value="' + value + '" />';
 }
 
 function log(body) {
