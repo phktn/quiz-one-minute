@@ -6,7 +6,7 @@
 
 ## スクリーンショット / Screenshots
 
-[<img src='images/Screenshot.png' width='256'/>](images/Screenshot.png)
+[<img src='images/Screenshot.png' width='512'/>](images/Screenshot.png)
 
 ## How to run
 
