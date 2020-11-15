@@ -16,6 +16,7 @@
 
 package com.mizo0203.quiz.one.minute
 
+import java.io.IOException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
@@ -109,6 +110,20 @@ internal class FlagManager private constructor() {
         }
     }
 
+    fun setCorrectAnswer(num: Int) {
+        val errorIds = mutableListOf<Int>();
+        mListenerMap.forEach { (id, listener) ->
+            try {
+                listener.onSetCorrectAnswer(num)
+            } catch (e: IOException) {
+                errorIds.add(id)
+            }
+        }
+        errorIds.forEach { id ->
+            mListenerMap.remove(id)
+        }
+    }
+
     fun message(msg: String) {
         val params = synchronized(mFlagIdLockObject) {
             mParams = Params(mParams.flagIds, mParams.mSkipId, mParams.mSkipCnt, mParams.flagId, msg)
@@ -123,14 +138,20 @@ internal class FlagManager private constructor() {
         mListenerMap[id] = listener
     }
 
+    @Deprecated(message = "Will be removed soon")
     fun unregisterListener(id: Int) {
         mListenerMap.remove(id)
     }
 
     internal interface Listener {
+        @Throws(IOException::class)
         fun onFlagIdChanged(params: Params)
 
+        @Throws(IOException::class)
         fun onSelectProblemSet(num: Int)
+
+        @Throws(IOException::class)
+        fun onSetCorrectAnswer(num: Int)
     }
 
     /**

@@ -45,6 +45,7 @@ class StreamServlet : HttpServlet() {
         val target = ServletEventTarget(req).ok().open()
         val id = syncedCounter.up()
         FlagManager.instance.registerListener(id, object : FlagManager.Listener {
+            @Throws(IOException::class)
             override fun onFlagIdChanged(params: Params) {
                 try {
                     printOutButton(target, params, id)
@@ -53,6 +54,7 @@ class StreamServlet : HttpServlet() {
                 }
             }
 
+            @Throws(IOException::class)
             override fun onSelectProblemSet(num: Int) {
                 try {
                     val jsonBytes = jacksonObjectMapper().writeValueAsBytes(ResponseProblemSet(num))
@@ -60,6 +62,12 @@ class StreamServlet : HttpServlet() {
                 } catch (e: IOException) {
                     FlagManager.instance.unregisterListener(id)
                 }
+            }
+
+            @Throws(IOException::class)
+            override fun onSetCorrectAnswer(num: Int) {
+                val jsonBytes = jacksonObjectMapper().writeValueAsBytes(ResponseCorrectAnswer(num))
+                target.send("message", String(jsonBytes, StandardCharsets.ISO_8859_1))
             }
         })
         printOutButton(target, FlagManager.instance.params, id)

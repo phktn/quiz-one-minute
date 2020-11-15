@@ -29,6 +29,9 @@ function connect() {
         if (response.problemSetNum > 0) {
             onSelectProblemSet(response.problemSetNum);
         }
+        if (response.correctAnswerNum > 0) {
+            onSetCorrectAnswer(response.correctAnswerNum);
+        }
     }, false);
     source.addEventListener('open', function (e) {
         console.log("Connecting to the chat server..." + e);
@@ -121,6 +124,10 @@ function onSelectProblemSet(num) {
     }
     document.getElementById('problem-set-lamp-selected-' + num).className = 'problem-set-lamp-selected-on';
     document.getElementById('problem-set-lamp-selectable-' + num).className = 'problem-set-lamp-off';
+}
+
+function onSetCorrectAnswer(num) {
+    document.getElementById('correct-answer-lamp-' + num).className = 'visible-danger';
 }
 
 function reconnect() {

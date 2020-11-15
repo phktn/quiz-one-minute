@@ -95,6 +95,12 @@ function selectProblemSet(num) {
 function onSelectProblemSet(num) {
 }
 
+function setCorrectAnswer(num) {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/quiz-one-minute/setCorrectAnswer', true);
+    request.send(num);
+}
+
 function reconnect() {
     if (reconnectWait == 0) {
         reconnectWait = 1;
