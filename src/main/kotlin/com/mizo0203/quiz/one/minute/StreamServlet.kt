@@ -65,6 +65,12 @@ class StreamServlet : HttpServlet() {
             }
 
             @Throws(IOException::class)
+            override fun onStartOneMinute() {
+                val jsonBytes = jacksonObjectMapper().writeValueAsBytes(ResponseOneMinuteStart())
+                target.send("message", String(jsonBytes, StandardCharsets.ISO_8859_1))
+            }
+
+            @Throws(IOException::class)
             override fun onSetCorrectAnswer(num: Int) {
                 val jsonBytes = jacksonObjectMapper().writeValueAsBytes(ResponseCorrectAnswer(num))
                 target.send("message", String(jsonBytes, StandardCharsets.ISO_8859_1))

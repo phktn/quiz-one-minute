@@ -32,6 +32,9 @@ function connect() {
         if (response.correctAnswerNum > 0) {
             onSetCorrectAnswer(response.correctAnswerNum);
         }
+        if (response.startOneMinute == true) {
+            startAnimationOneMinute();
+        }
     }, false);
     source.addEventListener('open', function (e) {
         console.log("Connecting to the chat server..." + e);

@@ -57,35 +57,6 @@ function send(id) {
     }
 }
 
-function startAnimation() {
-    let elements = [];
-    let animationCnt = 0;
-    for (let i = 1; i <= 60; i++) {
-        elements.push(document.getElementById('light-' + ('00' + i).slice(-2)));
-    }
-    if (animationId != 0) {
-        clearInterval(animationId);
-    }
-    animationId = setInterval(function handler() {
-        animationCnt++;
-        for (const i in elements) {
-            if (Math.floor((i - animationCnt) / 5) % 3 == 0) {
-                elements[i].className = `invisible`;
-            } else {
-                elements[i].className = `visible-success`;
-            }
-        }
-        return handler;
-    }(), 200);
-}
-
-function initProblemSetLamp() {
-    for (let i = 1; i <= 10; i++) {
-        document.getElementById('problem-set-lamp-selected-' + i).className = 'problem-set-lamp-off';
-        document.getElementById('problem-set-lamp-selectable-' + i).className = 'problem-set-lamp-selectable-on';
-    }
-}
-
 function selectProblemSet(num) {
     var request = new XMLHttpRequest();
     request.open('POST', '/quiz-one-minute/selectProblemSet', true);
@@ -93,6 +64,12 @@ function selectProblemSet(num) {
 }
 
 function onSelectProblemSet(num) {
+}
+
+function startOneMinute() {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/quiz-one-minute/startOneMinute', true);
+    request.send(null);
 }
 
 function setCorrectAnswer(num) {

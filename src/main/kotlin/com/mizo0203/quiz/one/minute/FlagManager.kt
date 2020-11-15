@@ -110,11 +110,23 @@ internal class FlagManager private constructor() {
         }
     }
 
+    fun startOneMinute() {
+        sendMessageEventToAll { listener ->
+            listener.onStartOneMinute()
+        }
+    }
+
     fun setCorrectAnswer(num: Int) {
-        val errorIds = mutableListOf<Int>();
+        sendMessageEventToAll { listener ->
+            listener.onSetCorrectAnswer(num)
+        }
+    }
+
+    private fun sendMessageEventToAll(callback: (listener: Listener) -> Unit) {
+        val errorIds = mutableListOf<Int>()
         mListenerMap.forEach { (id, listener) ->
             try {
-                listener.onSetCorrectAnswer(num)
+                callback(listener)
             } catch (e: IOException) {
                 errorIds.add(id)
             }
@@ -149,6 +161,9 @@ internal class FlagManager private constructor() {
 
         @Throws(IOException::class)
         fun onSelectProblemSet(num: Int)
+
+        @Throws(IOException::class)
+        fun onStartOneMinute()
 
         @Throws(IOException::class)
         fun onSetCorrectAnswer(num: Int)
