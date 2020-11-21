@@ -27,7 +27,10 @@ function connect() {
             onSelectProblemSet(response.problemSetNum);
         }
         if (response.correctAnswerNum > 0) {
-            onSetCorrectAnswer(response.correctAnswerNum);
+            onSetCorrectAnswerNum(response.correctAnswerNum);
+        }
+        if (response.correctAnswerTotal > -1) {
+            onSetCorrectAnswerTotal(response.correctAnswerTotal);
         }
         if (response.startOneMinute == true) {
             startAnimationOneMinute();
@@ -44,22 +47,6 @@ function connect() {
             reconnect();
         }
     }, false);
-}
-
-function send(id) {
-    var nickname = document.getElementById('nickname').value;
-    log('send id: ' + id + ' nickname: ' + nickname);
-    var request = new XMLHttpRequest();
-    request.open('GET', '/quiz-one-minute/challenge?id=' + id + '&nickname=' + nickname, false);
-    request.send(null);
-    if (request.status === 200) {
-        log(request.responseText);
-        if (request.responseText) {
-            response = JSON.parse(request.responseText);
-            document.getElementById('delayMs').innerHTML = response.delayMs;
-            document.getElementById('hero').className = response.hero;
-        }
-    }
 }
 
 function startAnimation() {
@@ -126,8 +113,12 @@ function onSelectProblemSet(num) {
     document.getElementById('problem-set-lamp-selectable-' + num).className = 'problem-set-lamp-off';
 }
 
-function onSetCorrectAnswer(num) {
+function onSetCorrectAnswerNum(num) {
     document.getElementById('correct-answer-lamp-' + num).className = 'visible-danger';
+}
+
+function onSetCorrectAnswerTotal(total) {
+    document.getElementById('correct-answer-total').innerText = total;
 }
 
 function reconnect() {
@@ -150,30 +141,6 @@ function reconnect() {
             }
         }, 1000);
     }
-}
-
-function start() {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/start', false);
-    request.send(null);
-}
-
-function skip(msg) {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/skip', false);
-    request.send(msg);
-}
-
-function advance() {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/advance', false);
-    request.send(null);
-}
-
-function message(msg) {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/message', false);
-    request.send(msg);
 }
 
 function disableButton(value) {

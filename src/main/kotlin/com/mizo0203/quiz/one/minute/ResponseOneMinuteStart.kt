@@ -4,4 +4,4 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ResponseOneMinuteStart(
         @JsonProperty("startOneMinute") val startOneMinute: Boolean = true,
-)
+) : AbstractResponse()

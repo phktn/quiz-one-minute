@@ -38,22 +38,6 @@ function connect() {
     }, false);
 }
 
-function send(id) {
-    var nickname = document.getElementById('nickname').value;
-    log('send id: ' + id + ' nickname: ' + nickname);
-    var request = new XMLHttpRequest();
-    request.open('GET', '/quiz-one-minute/challenge?id=' + id + '&nickname=' + nickname, false);
-    request.send(null);
-    if (request.status === 200) {
-        log(request.responseText);
-        if (request.responseText) {
-            response = JSON.parse(request.responseText);
-            document.getElementById('delayMs').innerHTML = response.delayMs;
-            document.getElementById('hero').className = response.hero;
-        }
-    }
-}
-
 function selectProblemSet(num) {
     var request = new XMLHttpRequest();
     request.open('POST', '/quiz-one-minute/selectProblemSet', true);
@@ -95,30 +79,6 @@ function reconnect() {
             }
         }, 1000);
     }
-}
-
-function start() {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/start', false);
-    request.send(null);
-}
-
-function skip(msg) {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/skip', false);
-    request.send(msg);
-}
-
-function advance() {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/advance', false);
-    request.send(null);
-}
-
-function message(msg) {
-    var request = new XMLHttpRequest();
-    request.open('POST', '/quiz-one-minute/message', false);
-    request.send(msg);
 }
 
 function disableButton(value) {

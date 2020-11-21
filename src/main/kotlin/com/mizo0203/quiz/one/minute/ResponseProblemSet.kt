@@ -4,4 +4,4 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ResponseProblemSet(
         @JsonProperty("problemSetNum") val problemSetNum: Int,
-)
+) : AbstractResponse()
