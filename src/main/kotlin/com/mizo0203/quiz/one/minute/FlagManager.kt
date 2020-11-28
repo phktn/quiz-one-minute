@@ -21,50 +21,45 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 internal class FlagManager private constructor() {
-    private val mListenerMap = ConcurrentHashMap<Int, Listener>()
+    private val mListenerMap = ConcurrentHashMap<Int, (ResponseMessage) -> Unit>()
     private val params = Params()
 
     fun selectProblemSet(num: Int) {
-        sendMessageEventToAll { onSelectProblemSet(num) }
+        sendMessageEventToAll(
+                ResponseMessage(problemSetNum = num)
+        )
     }
 
     fun startOneMinute() {
         params {
             correctAnswerNumSet.clear()
         }
-        sendMessageEventToAll { onStartOneMinute() }
+        sendMessageEventToAll(
+                ResponseMessage(startOneMinute = true, correctAnswerTotal = 0)
+        )
     }
 
     fun setCorrectAnswer(num: Int) {
         params {
             correctAnswerNumSet.add(num)
-            sendMessageEventToAll { onSetCorrectAnswer(num, correctAnswerNumSet.size) }
+            sendMessageEventToAll(
+                    ResponseMessage(correctAnswerNum = num, correctAnswerTotal = correctAnswerNumSet.size)
+            )
         }
     }
 
-    private fun sendMessageEventToAll(block: Listener.() -> Unit) {
+    private fun sendMessageEventToAll(message: ResponseMessage) {
         HashMap(mListenerMap).forEach { (id, listener) ->
             try {
-                block(listener)
+                listener.invoke(message)
             } catch (e: IOException) {
                 mListenerMap.remove(id)
             }
         }
     }
 
-    fun registerListener(id: Int, listener: Listener) {
+    fun registerListener(id: Int, listener: (ResponseMessage) -> Unit) {
         mListenerMap[id] = listener
-    }
-
-    internal interface Listener {
-        @Throws(IOException::class)
-        fun onSelectProblemSet(num: Int)
-
-        @Throws(IOException::class)
-        fun onStartOneMinute()
-
-        @Throws(IOException::class)
-        fun onSetCorrectAnswer(num: Int, total: Int)
     }
 
     internal class Params {

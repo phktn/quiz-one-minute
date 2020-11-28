@@ -43,27 +43,9 @@ class StreamServlet : HttpServlet() {
         resp.characterEncoding = "UTF-8"
         val target = ServletEventTarget(req).ok().open()
         val id = syncedCounter.up()
-        FlagManager.instance.registerListener(id, object : FlagManager.Listener {
-            @Throws(IOException::class)
-            override fun onSelectProblemSet(num: Int) {
-                sendMessage(ResponseProblemSet(num))
-            }
-
-            @Throws(IOException::class)
-            override fun onStartOneMinute() {
-                sendMessage(ResponseOneMinuteStart())
-            }
-
-            @Throws(IOException::class)
-            override fun onSetCorrectAnswer(num: Int, total: Int) {
-                sendMessage(ResponseCorrectAnswer(num, total))
-            }
-
-            @Throws(IOException::class)
-            private fun sendMessage(value: Any) {
-                val jsonBytes = jacksonObjectMapper().writeValueAsBytes(value)
-                target.send("message", String(jsonBytes, StandardCharsets.ISO_8859_1))
-            }
-        })
+        FlagManager.instance.registerListener(id) { message ->
+            val jsonBytes = jacksonObjectMapper().writeValueAsBytes(message)
+            target.send("message", String(jsonBytes, StandardCharsets.ISO_8859_1))
+        }
     }
 }
