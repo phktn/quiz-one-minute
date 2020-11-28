@@ -17,9 +17,6 @@ function connect() {
     source.addEventListener('message', function (e) {
         console.log('message data: ' + e.data);
         response = JSON.parse(e.data);
-        if (response.delayMs != null) {
-            document.getElementById('delayMs').innerHTML = response.delayMs;
-        }
         if (response.hero != null) {
             document.getElementById('hero').className = response.hero;
         }
@@ -83,7 +80,6 @@ function reconnect() {
 
 function disableButton(value) {
     log('disableButton() value: ' + value);
-    document.getElementById('delayMs').innerText = '';
     document.getElementById('hero').className = 'hero is-dark';
 }
 
