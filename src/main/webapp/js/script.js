@@ -122,6 +122,58 @@ function onSetCorrectAnswerNum(num) {
 
 function onSetCorrectAnswerTotal(total) {
     document.getElementById('correct-answer-total').innerText = total;
+    switch (total) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            document.getElementById('correct-answer-total').style = '';
+            document.getElementById('prize').innerText = '0';
+            document.getElementById('prize').style = 'color: hsl(348, 100%, 61%);';
+            break;
+        case 6:
+            document.getElementById('correct-answer-total').style = 'color: lime';
+            document.getElementById('prize').innerText = '500';
+            document.getElementById('prize').style = 'color: lime';
+            break;
+        case 7:
+            document.getElementById('correct-answer-total').style = 'color: darkorange';
+            document.getElementById('prize').innerText = '1,000';
+            document.getElementById('prize').style = 'color: darkorange';
+            break;
+        case 8:
+            document.getElementById('correct-answer-total').style = 'color: darkorange';
+            document.getElementById('prize').innerText = '1,500';
+            document.getElementById('prize').style = 'color: darkorange';
+            break;
+        case 9:
+            document.getElementById('correct-answer-total').style = 'color: darkorange';
+            document.getElementById('prize').innerText = '2,000';
+            document.getElementById('prize').style = 'color: darkorange';
+            break;
+        case 10:
+            document.getElementById('correct-answer-total').style = 'color: darkorange';
+            document.getElementById('prize').innerText = '2,500';
+            document.getElementById('prize').style = 'color: darkorange';
+            break;
+        case 11:
+            document.getElementById('correct-answer-total').style = 'color: darkorange';
+            document.getElementById('prize').innerText = '3,000';
+            document.getElementById('prize').style = 'color: darkorange';
+            break;
+        case 12:
+            document.getElementById('correct-answer-total').style = 'color: aqua';
+            document.getElementById('prize').innerText = '5,000';
+            document.getElementById('prize').style = 'color: aqua';
+            break;
+        default:
+            document.getElementById('correct-answer-total').style = 'color: hsl(348, 100%, 61%);';
+            document.getElementById('prize').innerText = 'Error';
+            document.getElementById('prize').style = 'color: hsl(348, 100%, 61%);';
+            break;
+    }
 }
 
 function reconnect() {
