@@ -24,6 +24,12 @@ internal class FlagManager private constructor() {
     private val mListenerMap = ConcurrentHashMap<Int, (ResponseMessage) -> Unit>()
     private val params = Params()
 
+    fun setNickname(nickname: String) {
+        sendMessageEventToAll(
+                ResponseMessage(nickname = nickname)
+        )
+    }
+
     fun selectProblemSet(num: Int) {
         sendMessageEventToAll(
                 ResponseMessage(problemSetNum = num)

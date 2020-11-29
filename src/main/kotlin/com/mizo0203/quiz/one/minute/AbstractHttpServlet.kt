@@ -33,6 +33,14 @@ abstract class AbstractHttpServlet : HttpServlet() {
 
     abstract fun onReadLine(line: String)
 
+    @WebServlet(name = "NicknameSetServlet", urlPatterns = ["/setNickname"])
+    class NicknameSetServlet : AbstractHttpServlet() {
+        override fun onReadLine(line: String) {
+            FlagManager.instance.setNickname(line.trim())
+            LOG.info("NicknameSetServlet doPost")
+        }
+    }
+
     @WebServlet(name = "ProblemSetServlet", urlPatterns = ["/selectProblemSet"])
     class ProblemSetServlet : AbstractHttpServlet() {
         override fun onReadLine(line: String) {

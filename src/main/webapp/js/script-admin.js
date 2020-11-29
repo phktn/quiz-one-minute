@@ -35,6 +35,12 @@ function connect() {
     }, false);
 }
 
+function setNickname() {
+    var request = new XMLHttpRequest();
+    request.open('POST', '/quiz-one-minute/setNickname', true);
+    request.send(document.getElementById('nickname').value);
+}
+
 function selectProblemSet(num) {
     var request = new XMLHttpRequest();
     request.open('POST', '/quiz-one-minute/selectProblemSet', true);

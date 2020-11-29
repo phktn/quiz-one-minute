@@ -23,6 +23,9 @@ function connect() {
         if (response.hero != null) {
             document.getElementById('hero').className = response.hero;
         }
+        if (response.nickname != null) {
+            document.getElementById('nickname').innerText = response.nickname;
+        }
         if (response.problemSetNum > 0) {
             onSelectProblemSet(response.problemSetNum);
         }
