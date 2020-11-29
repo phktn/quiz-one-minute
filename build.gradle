@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.4.10'
+        kotlinVersion = '1.4.20'
         tomcatVersion = '7.0.96'
     }
     repositories {
