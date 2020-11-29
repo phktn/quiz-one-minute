@@ -16,7 +16,7 @@ buildscript {
 apply plugin: 'kotlin'
 apply plugin: 'com.bmuschko.tomcat'
 
-version = '0.2'
+version = '0.3'
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
