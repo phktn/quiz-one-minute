@@ -1,5 +1,6 @@
 var reconnectWait;
 let animationId = 0;
+let problems = null;
 
 window.addEventListener('DOMContentLoaded', () => {
     log('DOMContentLoaded');
@@ -26,8 +27,8 @@ function connect() {
         if (response.nickname != null) {
             document.getElementById('nickname').innerText = response.nickname;
         }
-        if (response.problemSetNum > 0) {
-            onSelectProblemSet(response.problemSetNum);
+        if (response.problemSet != null) {
+            onSelectProblemSet(response.problemSet);
         }
         if (response.correctAnswerNum > 0) {
             onSetCorrectAnswerNum(response.correctAnswerNum);
@@ -87,15 +88,24 @@ function startAnimationOneMinute() {
         clearInterval(animationId);
     }
     animationId = setInterval(function handler() {
-        animationCnt++;
-        if (animationCnt == 60) {
-            clearInterval(animationId);
+        if (animationCnt < 60 && animationCnt % 5 == 0) {
+            document.getElementById('question').innerHTML = problems[Math.floor(animationCnt / 5)].question;
         }
-        for (let i = 0; i < animationCnt; i++) {
+        if (animationCnt % 5 == 0) {
+            document.getElementById('answer').innerHTML = '';
+        }
+        if (animationCnt > 2 && animationCnt % 5 == 2) {
+            document.getElementById('answer').innerHTML = problems[Math.floor(animationCnt / 5) - 1].answer;
+        }
+        for (let i = 0; i < animationCnt && i < 60; i++) {
             elements[i].className = `invisible`;
         }
         for (let i = animationCnt; i < 60; i++) {
             elements[i].className = `visible-success`;
+        }
+        animationCnt++;
+        if (animationCnt == 66) {
+            clearInterval(animationId);
         }
         return handler;
     }(), 1000);
@@ -108,12 +118,13 @@ function initProblemSetLamp() {
     }
 }
 
-function onSelectProblemSet(num) {
+function onSelectProblemSet(problemSet) {
+    problems = problemSet.problems;
     for (let i = 1; i <= 10; i++) {
         document.getElementById('problem-set-lamp-selected-' + i).className = 'problem-set-lamp-off';
     }
-    document.getElementById('problem-set-lamp-selected-' + num).className = 'problem-set-lamp-selected-on';
-    document.getElementById('problem-set-lamp-selectable-' + num).className = 'problem-set-lamp-off';
+    document.getElementById('problem-set-lamp-selected-' + problemSet.num).className = 'problem-set-lamp-selected-on';
+    document.getElementById('problem-set-lamp-selectable-' + problemSet.num).className = 'problem-set-lamp-off';
 }
 
 function onSetCorrectAnswerNum(num) {
