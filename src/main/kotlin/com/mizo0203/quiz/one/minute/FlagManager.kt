@@ -26,7 +26,7 @@ internal class FlagManager private constructor() {
 
     fun setNickname(nickname: String) {
         sendMessageEventToAll(
-                ResponseMessage(nickname = nickname)
+            ResponseMessage(nickname = nickname)
         )
     }
 
@@ -39,7 +39,7 @@ internal class FlagManager private constructor() {
             correctAnswerNumSet.clear()
         }
         sendMessageEventToAll(
-                ResponseMessage(startOneMinute = true, correctAnswerTotal = 0)
+            ResponseMessage(startOneMinute = true, correctAnswerTotal = 0)
         )
     }
 
@@ -47,7 +47,7 @@ internal class FlagManager private constructor() {
         params {
             correctAnswerNumSet.add(num)
             sendMessageEventToAll(
-                    ResponseMessage(correctAnswerNum = num, correctAnswerTotal = correctAnswerNumSet.size)
+                ResponseMessage(correctAnswerNum = num, correctAnswerTotal = correctAnswerNumSet.size)
             )
         }
     }
