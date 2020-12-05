@@ -24,6 +24,11 @@ internal class FlagManager private constructor() {
     private val mListenerMap = ConcurrentHashMap<Int, (ResponseMessage) -> Unit>()
     private val params = Params()
 
+    fun registerListener(id: Int, listener: (ResponseMessage) -> Unit) {
+        mListenerMap[id] = listener
+        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[0]))
+    }
+
     fun setNickname(nickname: String) {
         sendMessageEventToAll(
             ResponseMessage(nickname = nickname)
@@ -31,7 +36,7 @@ internal class FlagManager private constructor() {
     }
 
     fun selectProblemSet(num: Int) {
-        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num - 1]))
+        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num]))
     }
 
     fun startOneMinute() {
@@ -60,10 +65,6 @@ internal class FlagManager private constructor() {
                 mListenerMap.remove(id)
             }
         }
-    }
-
-    fun registerListener(id: Int, listener: (ResponseMessage) -> Unit) {
-        mListenerMap[id] = listener
     }
 
     internal class Params {
