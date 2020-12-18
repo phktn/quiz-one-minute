@@ -18,12 +18,6 @@ function connect() {
     source.addEventListener('message', function (e) {
         console.log('message data: ' + e.data);
         response = JSON.parse(e.data);
-        if (response.delayMs != null) {
-            document.getElementById('delayMs').innerHTML = response.delayMs;
-        }
-        if (response.hero != null) {
-            document.getElementById('hero').className = response.hero;
-        }
         if (response.nickname != null) {
             document.getElementById('nickname').innerText = response.nickname;
         }
@@ -88,11 +82,12 @@ function startAnimationOneMinute() {
         clearInterval(animationId);
     }
     animationId = setInterval(function handler() {
+        if (animationCnt % 5 == 0) {
+            document.getElementById('question').innerHTML = '';
+            document.getElementById('answer').innerHTML = '';
+        }
         if (animationCnt < 60 && animationCnt % 5 == 0) {
             document.getElementById('question').innerHTML = problems[Math.floor(animationCnt / 5)].question;
-        }
-        if (animationCnt % 5 == 0) {
-            document.getElementById('answer').innerHTML = '';
         }
         if (animationCnt > 2 && animationCnt % 5 == 2) {
             document.getElementById('answer').innerHTML = problems[Math.floor(animationCnt / 5) - 1].answer;
@@ -120,6 +115,11 @@ function initProblemSetLamp() {
 
 function onSelectProblemSet(problemSet) {
     problems = problemSet.problems;
+    if (problemSet.num == 0) {
+        return;
+    }
+    document.getElementById('question').innerHTML = '';
+    document.getElementById('answer').innerHTML = '';
     for (let i = 1; i <= 10; i++) {
         document.getElementById('problem-set-lamp-selected-' + i).className = 'problem-set-lamp-off';
     }
@@ -190,29 +190,19 @@ function onSetCorrectAnswerTotal(total) {
 function reconnect() {
     if (reconnectWait == 0) {
         reconnectWait = 1;
-        disableButton('接続中…');
         connect();
     } else {
         var waitSec = reconnectWait;
         reconnectWait *= 2;
-        disableButton(waitSec + ' 秒後に再接続');
         var id = setInterval(function () {
             waitSec--;
             if (waitSec <= 0) {
                 clearInterval(id);
-                disableButton('接続中…');
                 connect();
             } else {
-                disableButton(waitSec + ' 秒後に再接続');
             }
         }, 1000);
     }
-}
-
-function disableButton(value) {
-    log('disableButton() value: ' + value);
-    document.getElementById('delayMs').innerText = '';
-    document.getElementById('hero').className = 'hero is-dark';
 }
 
 function log(body) {

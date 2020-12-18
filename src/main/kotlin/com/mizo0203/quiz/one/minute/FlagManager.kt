@@ -36,7 +36,7 @@ internal class FlagManager private constructor() {
     }
 
     fun selectProblemSet(num: Int) {
-        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num]))
+        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num], correctAnswerTotal = 0))
     }
 
     fun startOneMinute() {
