@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height: 100%;">
+<html style="height: 100%;" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -8,6 +8,8 @@
     <link href="/quiz-one-minute/css/style.css" rel="stylesheet">
     <link href="https://avatars.githubusercontent.com/phktn" rel="icon" type="image/png">
     <link href="https://avatars.githubusercontent.com/phktn" rel="apple-touch-icon">
+    <script defer th:inline="javascript">const contextPath = [[${#httpServletRequest.contextPath}]];</script>
+    <script defer src="js/script.js"></script>
     <title>QUIZ ONE MINUTE</title>
 </head>
 
@@ -210,7 +212,6 @@
         </div>
     </div>
 </section>
-<script src="js/script.js"></script>
 </body>
 
 </html>

@@ -14,7 +14,7 @@ function connect() {
         console.log("YOUR BROWSER DOES NOT SUPPORT SSE");
         return;
     }
-    const source = new EventSource('/quiz-one-minute/stream');
+    const source = new EventSource(contextPath + '/stream');
     source.addEventListener('message', function (e) {
         console.log('message data: ' + e.data);
         response = JSON.parse(e.data);

@@ -11,7 +11,7 @@ function connect() {
         console.log("YOUR BROWSER DOES NOT SUPPORT SSE");
         return;
     }
-    const source = new EventSource('/quiz-one-minute/stream');
+    const source = new EventSource(contextPath + '/stream');
     source.addEventListener('message', function (e) {
         console.log('message data: ' + e.data);
         response = JSON.parse(e.data);
@@ -55,17 +55,17 @@ function reconnect() {
 }
 
 function setNickname() {
-    $.post('/quiz-one-minute/setNickname', $('#nickname').val());
+    $.post(contextPath + '/setNickname', $('#nickname').val());
 }
 
 function selectProblemSet(num) {
-    $.post('/quiz-one-minute/selectProblemSet', String(num));
+    $.post(contextPath + '/selectProblemSet', String(num));
 }
 
 function startOneMinute() {
-    $.post('/quiz-one-minute/startOneMinute');
+    $.post(contextPath + '/startOneMinute');
 }
 
 function setCorrectAnswer(num) {
-    $.post('/quiz-one-minute/setCorrectAnswer', String(num));
+    $.post(contextPath + '/setCorrectAnswer', String(num));
 }

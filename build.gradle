@@ -32,6 +32,7 @@ war {
 dependencies {
     implementation 'info.macias:jeasse-servlet3:0.11.3'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
