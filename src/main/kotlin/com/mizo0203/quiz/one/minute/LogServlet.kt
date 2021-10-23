@@ -16,18 +16,17 @@
 
 package com.mizo0203.quiz.one.minute
 
-import java.io.IOException
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RestController
 import java.util.logging.Logger
-import javax.servlet.annotation.WebServlet
-import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebServlet(name = "LogServlet", urlPatterns = ["/log"])
-class LogServlet : HttpServlet() {
+@RestController
+class LogServlet {
 
-    @Throws(IOException::class)
-    public override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
+    @PostMapping(value = ["/log"])
+    fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
         LOG.info(req.reader.readLine())
     }
 

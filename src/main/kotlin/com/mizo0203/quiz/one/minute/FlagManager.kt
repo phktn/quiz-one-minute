@@ -16,11 +16,12 @@
 
 package com.mizo0203.quiz.one.minute
 
+import org.springframework.stereotype.Service
 import java.io.IOException
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-internal class FlagManager private constructor() {
+@Service
+class FlagManager {
     private val mListenerMap = ConcurrentHashMap<Int, (ResponseMessage) -> Unit>()
     private val params = Params()
 
@@ -71,9 +72,5 @@ internal class FlagManager private constructor() {
         private val lockObject = Any()
         val correctAnswerNumSet: MutableSet<Int> = mutableSetOf()
         operator fun invoke(block: Params.() -> Unit) = synchronized(lockObject) { block() }
-    }
-
-    companion object {
-        val instance = FlagManager()
     }
 }

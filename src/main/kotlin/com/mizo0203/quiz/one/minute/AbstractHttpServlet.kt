@@ -16,51 +16,62 @@
 
 package com.mizo0203.quiz.one.minute
 
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RestController
 import java.io.IOException
 import java.util.logging.Logger
-import javax.servlet.annotation.WebServlet
-import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
-abstract class AbstractHttpServlet : HttpServlet() {
+abstract class AbstractHttpServlet {
 
     @Throws(IOException::class)
-    override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
+    open fun doPost(req: HttpServletRequest) {
         req.characterEncoding = "UTF-8"
         req.reader.use { input -> onReadLine(input.readLine() ?: "") }
     }
 
     abstract fun onReadLine(line: String)
 
-    @WebServlet(name = "NicknameSetServlet", urlPatterns = ["/setNickname"])
-    class NicknameSetServlet : AbstractHttpServlet() {
+    @RestController
+    class NicknameSetServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
+        @PostMapping(value = ["/setNickname"])
+        override fun doPost(req: HttpServletRequest) = super.doPost(req)
+
         override fun onReadLine(line: String) {
-            FlagManager.instance.setNickname(line.trim())
+            flagManager.setNickname(line.trim())
             LOG.info("NicknameSetServlet doPost")
         }
     }
 
-    @WebServlet(name = "ProblemSetServlet", urlPatterns = ["/selectProblemSet"])
-    class ProblemSetServlet : AbstractHttpServlet() {
+    @RestController
+    class ProblemSetServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
+        @PostMapping(value = ["/selectProblemSet"])
+        override fun doPost(req: HttpServletRequest) = super.doPost(req)
+
         override fun onReadLine(line: String) {
-            FlagManager.instance.selectProblemSet(line.toInt())
+            flagManager.selectProblemSet(line.toInt())
             LOG.info("SkipServlet doPost")
         }
     }
 
-    @WebServlet(name = "OneMinuteStartServlet", urlPatterns = ["/startOneMinute"])
-    class OneMinuteStartServlet : AbstractHttpServlet() {
+    @RestController
+    class OneMinuteStartServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
+        @PostMapping(value = ["/startOneMinute"])
+        override fun doPost(req: HttpServletRequest) = super.doPost(req)
+
         override fun onReadLine(line: String) {
-            FlagManager.instance.startOneMinute()
+            flagManager.startOneMinute()
             LOG.info("OneMinuteStartServlet doPost")
         }
     }
 
-    @WebServlet(name = "CorrectAnswerSetServlet", urlPatterns = ["/setCorrectAnswer"])
-    class CorrectAnswerSetServlet : AbstractHttpServlet() {
+    @RestController
+    class CorrectAnswerSetServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
+        @PostMapping(value = ["/setCorrectAnswer"])
+        override fun doPost(req: HttpServletRequest) = super.doPost(req)
+
         override fun onReadLine(line: String) {
-            FlagManager.instance.setCorrectAnswer(line.toInt())
+            flagManager.setCorrectAnswer(line.toInt())
             LOG.info("CorrectAnswerSetServlet doPost")
         }
     }
