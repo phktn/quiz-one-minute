@@ -1,4 +1,4 @@
-# Copyright 2020 Satoki Mizoguchi
+# Copyright 2022 P Hackathon
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,13 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# Set the port to the PORT environment variable
-logging.file.max-history=10
-logging.file.max-size=50MB
-logging.file.name=./logs/demo.log
-logging.level.com.mizo0203.springboot.helloworld=debug
-logging.level.org.springframework.web=info
-logging.level.root=info
-server.port=8080
-server.servlet.context-path=/quiz-one-minute
-spring.http.encoding.charset=UTF-8
+
+runtime: java17 # or another supported version
+
+instance_class: F1 # default

@@ -7,7 +7,7 @@ function setNickname() {
 }
 
 function selectProblemSet(num) {
-    $.post(contextPath + '/selectProblemSet', String(num), (data) => {
+    $.post('/selectProblemSet', String(num), (data) => {
         console.log(`message data: ${data}`);
         response = JSON.parse(data);
         onSelectProblemSet(response.problemSet);
@@ -16,7 +16,7 @@ function selectProblemSet(num) {
 }
 
 function startOneMinute() {
-    $.post(contextPath + '/startOneMinute', (data) => {
+    $.post('/startOneMinute', (data) => {
         console.log(`message data: ${data}`);
         onSetCorrectAnswerTotal(0);
         startAnimationOneMinute();
@@ -24,7 +24,7 @@ function startOneMinute() {
 }
 
 function setCorrectAnswer(num) {
-    $.post(contextPath + '/setCorrectAnswer', String(num), (data) => {
+    $.post('/setCorrectAnswer', String(num), (data) => {
         console.log(`message data: ${data}`);
         response = JSON.parse(data);
         if (response.correctAnswerNum > 0) {
@@ -179,7 +179,7 @@ function onSelectProblemSet(problemSet) {
 }
 
 function openQuizWindow() {
-    quiz_window = window.open('/quiz-one-minute/','','width=670,height=790,menubar');
+    quiz_window = window.open('/', '', 'width=670,height=790,menubar');
     quiz_window.addEventListener('DOMContentLoaded', () => {
         console.log('DOMContentLoaded');
         initProblemSetLamp();

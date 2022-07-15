@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, P Hackathon
+ * Copyright 2022, P Hackathon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package com.mizo0203.quiz.one.minute
 
-import org.springframework.stereotype.Service
-
-@Service
 class FlagManager {
     private val params = Params()
 

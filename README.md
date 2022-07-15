@@ -16,7 +16,7 @@ And access to http://localhost:8080/quiz-one-minute/
 
 ## ライセンス / License
 
-    Copyright 2020 P Hackathon
+    Copyright 2022 P Hackathon
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
