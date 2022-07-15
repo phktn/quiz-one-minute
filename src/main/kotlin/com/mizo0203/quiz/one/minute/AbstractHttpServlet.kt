@@ -24,26 +24,27 @@ import java.util.logging.Logger
 import javax.servlet.http.HttpServletRequest
 
 abstract class AbstractHttpServlet {
-    var ret: String = ""
 
     @Throws(IOException::class)
     open fun doPost(req: HttpServletRequest): String {
-        req.characterEncoding = "UTF-8"
-        ret = ""
-        req.reader.use { input -> onReadLine(input.readLine() ?: "") }
-        return ret
+        return req.reader.use { input -> onReadLine(input.readLine() ?: "") }
     }
 
-    abstract fun onReadLine(line: String)
+    abstract fun onReadLine(line: String): String
 
     @RestController
-    class ProblemSetServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
+    class ProblemSetServlet(
+        private val flagManager: FlagManager,
+        private val objectMapper: ObjectMapper,
+    ) :
+        AbstractHttpServlet() {
         @PostMapping(value = ["/selectProblemSet"])
         override fun doPost(req: HttpServletRequest) = super.doPost(req)
 
-        override fun onReadLine(line: String) {
-            flagManager.selectProblemSet(line.toInt())
-            LOG.info("SkipServlet doPost")
+        override fun onReadLine(line: String): String {
+            val message = flagManager.selectProblemSet(line.toInt())
+            LOG.info("ProblemSetServlet doPost")
+            return objectMapper.writeValueAsString(message)
         }
     }
 
@@ -52,9 +53,10 @@ abstract class AbstractHttpServlet {
         @PostMapping(value = ["/startOneMinute"])
         override fun doPost(req: HttpServletRequest) = super.doPost(req)
 
-        override fun onReadLine(line: String) {
+        override fun onReadLine(line: String): String {
             flagManager.startOneMinute()
             LOG.info("OneMinuteStartServlet doPost")
+            return ""
         }
     }
 
@@ -66,10 +68,10 @@ abstract class AbstractHttpServlet {
         @PostMapping(value = ["/setCorrectAnswer"])
         override fun doPost(req: HttpServletRequest) = super.doPost(req)
 
-        override fun onReadLine(line: String) {
+        override fun onReadLine(line: String): String {
             val message = flagManager.setCorrectAnswer(line.toInt())
             LOG.info("CorrectAnswerSetServlet doPost")
-            ret = objectMapper.writeValueAsString(message)
+            return objectMapper.writeValueAsString(message)
         }
     }
 

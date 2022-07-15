@@ -17,45 +17,22 @@
 package com.mizo0203.quiz.one.minute
 
 import org.springframework.stereotype.Service
-import java.io.IOException
-import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class FlagManager {
-    private val mListenerMap = ConcurrentHashMap<Int, (ResponseMessage) -> Unit>()
     private val params = Params()
 
-    fun registerListener(id: Int, listener: (ResponseMessage) -> Unit) {
-        mListenerMap[id] = listener
-        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[0]))
-    }
-
-    fun selectProblemSet(num: Int) {
-        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num]))
-    }
+    fun selectProblemSet(num: Int) = ResponseMessage(problemSet = Define.problemSetList[num])
 
     fun startOneMinute() {
         params {
             correctAnswerNumSet.clear()
         }
-        sendMessageEventToAll(
-            ResponseMessage(startOneMinute = true)
-        )
     }
 
     fun setCorrectAnswer(num: Int): ResponseMessage = params {
         correctAnswerNumSet.add(num)
         return@params ResponseMessage(correctAnswerNum = num, correctAnswerTotal = correctAnswerNumSet.size)
-    }
-
-    private fun sendMessageEventToAll(message: ResponseMessage) {
-        HashMap(mListenerMap).forEach { (id, listener) ->
-            try {
-                listener.invoke(message)
-            } catch (e: IOException) {
-                mListenerMap.remove(id)
-            }
-        }
     }
 
     internal class Params {
