@@ -1,4 +1,5 @@
 var reconnectWait;
+var quiz_window;
 
 window.addEventListener('DOMContentLoaded', () => {
     reconnectWait = 0;
@@ -55,7 +56,7 @@ function reconnect() {
 }
 
 function setNickname() {
-    $.post(contextPath + '/setNickname', $('#nickname').val());
+    quiz_window.document.getElementById('nickname').innerText = $('#nickname').val();
 }
 
 function selectProblemSet(num) {
@@ -68,4 +69,8 @@ function startOneMinute() {
 
 function setCorrectAnswer(num) {
     $.post(contextPath + '/setCorrectAnswer', String(num));
+}
+
+function openQuizWindow() {
+    quiz_window = window.open('/quiz-one-minute/','','width=670,height=790,menubar');
 }

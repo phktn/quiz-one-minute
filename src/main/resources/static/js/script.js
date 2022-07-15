@@ -18,9 +18,6 @@ function connect() {
     source.addEventListener('message', function (e) {
         console.log('message data: ' + e.data);
         response = JSON.parse(e.data);
-        if (response.nickname != null) {
-            document.getElementById('nickname').innerText = response.nickname;
-        }
         if (response.problemSet != null) {
             onSelectProblemSet(response.problemSet);
         }

@@ -33,17 +33,6 @@ abstract class AbstractHttpServlet {
     abstract fun onReadLine(line: String)
 
     @RestController
-    class NicknameSetServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
-        @PostMapping(value = ["/setNickname"])
-        override fun doPost(req: HttpServletRequest) = super.doPost(req)
-
-        override fun onReadLine(line: String) {
-            flagManager.setNickname(line.trim())
-            LOG.info("NicknameSetServlet doPost")
-        }
-    }
-
-    @RestController
     class ProblemSetServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
         @PostMapping(value = ["/selectProblemSet"])
         override fun doPost(req: HttpServletRequest) = super.doPost(req)

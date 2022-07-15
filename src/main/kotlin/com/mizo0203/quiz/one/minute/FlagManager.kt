@@ -30,12 +30,6 @@ class FlagManager {
         sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[0]))
     }
 
-    fun setNickname(nickname: String) {
-        sendMessageEventToAll(
-            ResponseMessage(nickname = nickname)
-        )
-    }
-
     fun selectProblemSet(num: Int) {
         sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num], correctAnswerTotal = 0))
     }
