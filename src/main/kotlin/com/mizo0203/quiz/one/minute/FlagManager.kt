@@ -31,7 +31,7 @@ class FlagManager {
     }
 
     fun selectProblemSet(num: Int) {
-        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num], correctAnswerTotal = 0))
+        sendMessageEventToAll(ResponseMessage(problemSet = Define.problemSetList[num]))
     }
 
     fun startOneMinute() {
@@ -39,17 +39,13 @@ class FlagManager {
             correctAnswerNumSet.clear()
         }
         sendMessageEventToAll(
-            ResponseMessage(startOneMinute = true, correctAnswerTotal = 0)
+            ResponseMessage(startOneMinute = true)
         )
     }
 
-    fun setCorrectAnswer(num: Int) {
-        params {
-            correctAnswerNumSet.add(num)
-            sendMessageEventToAll(
-                ResponseMessage(correctAnswerNum = num, correctAnswerTotal = correctAnswerNumSet.size)
-            )
-        }
+    fun setCorrectAnswer(num: Int): ResponseMessage = params {
+        correctAnswerNumSet.add(num)
+        return@params ResponseMessage(correctAnswerNum = num, correctAnswerTotal = correctAnswerNumSet.size)
     }
 
     private fun sendMessageEventToAll(message: ResponseMessage) {
@@ -65,6 +61,6 @@ class FlagManager {
     internal class Params {
         private val lockObject = Any()
         val correctAnswerNumSet: MutableSet<Int> = mutableSetOf()
-        operator fun invoke(block: Params.() -> Unit) = synchronized(lockObject) { block() }
+        operator fun <R> invoke(block: Params.() -> R) = synchronized(lockObject) { block() }
     }
 }

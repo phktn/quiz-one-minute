@@ -16,6 +16,7 @@
 
 package com.mizo0203.quiz.one.minute
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.io.IOException
@@ -23,11 +24,14 @@ import java.util.logging.Logger
 import javax.servlet.http.HttpServletRequest
 
 abstract class AbstractHttpServlet {
+    var ret: String = ""
 
     @Throws(IOException::class)
-    open fun doPost(req: HttpServletRequest) {
+    open fun doPost(req: HttpServletRequest): String {
         req.characterEncoding = "UTF-8"
+        ret = ""
         req.reader.use { input -> onReadLine(input.readLine() ?: "") }
+        return ret
     }
 
     abstract fun onReadLine(line: String)
@@ -55,13 +59,17 @@ abstract class AbstractHttpServlet {
     }
 
     @RestController
-    class CorrectAnswerSetServlet(private val flagManager: FlagManager) : AbstractHttpServlet() {
+    class CorrectAnswerSetServlet(
+        private val flagManager: FlagManager,
+        private val objectMapper: ObjectMapper,
+    ) : AbstractHttpServlet() {
         @PostMapping(value = ["/setCorrectAnswer"])
         override fun doPost(req: HttpServletRequest) = super.doPost(req)
 
         override fun onReadLine(line: String) {
-            flagManager.setCorrectAnswer(line.toInt())
+            val message = flagManager.setCorrectAnswer(line.toInt())
             LOG.info("CorrectAnswerSetServlet doPost")
+            ret = objectMapper.writeValueAsString(message)
         }
     }
 
