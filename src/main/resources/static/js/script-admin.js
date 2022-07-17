@@ -170,7 +170,7 @@ function onSelectProblemSet(num) {
 }
 
 function openQuizWindow() {
-    quiz_window = window.open('/', '', 'width=670,height=790,menubar');
+    quiz_window = window.open('/questions.html', '', 'width=670,height=790,menubar');
     quiz_window.addEventListener('DOMContentLoaded', () => {
         console.log('DOMContentLoaded');
         initProblemSetLamp();
