@@ -15,6 +15,12 @@
 <body style="font-family: sans-serif;">
 <h1>管理 - QUIZ ONE MINUTE</h1>
 <p><input onclick="openQuizWindow();" type="button" value="起動"/></p>
+<form id="problemListFileUploadForm">
+    <p>
+        <input accept="text/csv" name="problemListFile" type="file"/>
+        <input onclick="fileUpload()" type="button" value="アップロード"/>
+    </p>
+</form>
 <p><input id="nickname" placeholder="ニックネーム" type="text"><input onclick="setNickname();" type="button" value="送信"/></p>
 <p>
     <input onclick="selectProblemSet(1);" type="button" value="1"/>
@@ -99,7 +105,6 @@
         <th id="answer-12"></th>
     </tr>
 </table>
-<div id="log">EOF</div>
 </body>
 
 </html>
